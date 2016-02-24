@@ -1,0 +1,11 @@
+Package: enigma2-plugin-extensions-mediainfo
+Version: 3.0.0
+Description: MediaInfo
+Section: extra
+Priority: optional
+Maintainer: MP
+Architecture: all
+OE: MediaInfo
+Homepage: none
+Depends: python-twisted-core, python-twisted-web, python-subprocess 
+Source: GIT
