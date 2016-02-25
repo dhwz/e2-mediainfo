@@ -194,12 +194,12 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 	skin = """
 	<screen name="MediaInfo Config" title="" position="center,center" size="1280,720" flags="wfNoBorder">
 	  <widget render="Label" source="title_label" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
-	  <widget name="config" position="20,55" size="1240,395" transparent="1" scrollbarMode="showOnDemand" />
+	  <widget name="config" position="10,55" size="1260,620" transparent="1" scrollbarMode="showOnDemand" />
 	  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <widget name="key_yellow" position="761,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <widget name="key_blue" position="1073,684" size="200,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <ePixmap position="59,684" size="21,25" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
+	  <ePixmap position="59,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
 	  <ePixmap position="374,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
 	  <ePixmap position="726,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
 	  <ePixmap position="1037,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
@@ -276,7 +276,7 @@ class mediaInfoFolderScreen(Screen):
 	<screen name="MediaInfo Folder" title="" position="center,center" size="1280,720" flags="wfNoBorder">
 	  <widget render="Label" source="title_label" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
 	  <widget name="media" position="20,50" size="1240,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="left" valign="center" />
-	  <widget name="folderlist" position="20,55" size="1240,470" transparent="1" scrollbarMode="showOnDemand" />
+	  <widget name="folderlist" position="20,105" size="1240,570" transparent="1" scrollbarMode="showOnDemand" />
 	  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <ePixmap position="59,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
@@ -410,7 +410,7 @@ class mediaInfo(Screen):
 	<screen name="MediaInfo" title="" position="center,center" size="1280,720" flags="wfNoBorder">
 	  <widget render="Label" source="title_label" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
 	  <widget name="head" position="0,50" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
-	  <widget name="downloadList" position="center,55" size="1270,470" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
+	  <widget name="downloadList" position="5,105" size="1270,570" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
 	  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <widget name="key_yellow" position="761,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
