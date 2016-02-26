@@ -10,7 +10,6 @@
 #######################################################################
 
 from Components.Label import Label
-from Components.Sources.StaticText import StaticText
 from Components.ScrollLabel import ScrollLabel
 from Components.ConfigList import ConfigListScreen
 from Components.ActionMap import ActionMap
@@ -22,7 +21,7 @@ from Plugins.Plugin import PluginDescriptor
 from Screens.InfoBar import MoviePlayer
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-from enigma import gFont, eTimer, eConsoleAppContainer, ePicLoad, eListboxPythonMultiContent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
+from enigma import gFont, getDesktop, eTimer, eConsoleAppContainer, ePicLoad, eListboxPythonMultiContent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
 from Tools.Directories import pathExists, fileExists
 from Tools.BoundFunction import boundFunction
 
@@ -193,7 +192,7 @@ class downloadTask(Thread):
 class mediaInfoConfigScreen(Screen, ConfigListScreen):
 	skin = """
 	<screen name="MediaInfo Config" title="" position="center,center" size="1280,720" flags="wfNoBorder">
-	  <widget render="Label" source="title_label" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
+	  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
 	  <widget name="config" position="10,55" size="1260,620" transparent="1" scrollbarMode="showOnDemand" />
 	  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
@@ -223,7 +222,6 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 		self['key_green'] = Label("Save")
 		self['key_yellow'] = Label()
 		self['key_blue'] = Label()
-		self['title_label'] = StaticText()
 
 		self.list = []
 		self.createConfigList()
@@ -231,7 +229,6 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 
 	def createConfigList(self):
 		self.setTitle(pname + " Setup " + pversion)
-		self['title_label'].setText(pname + " Setup " + pversion)
 		self.list = []
 		self.list.append(getConfigListEntry("Save Downloads to:", config.plugins.mediainfo.savetopath))
 		self.list.append(getConfigListEntry("Show 'Download Complete' Message:", config.plugins.mediainfo.donemsg))
@@ -274,9 +271,9 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 class mediaInfoFolderScreen(Screen):
 	skin = """
 	<screen name="MediaInfo Folder" title="" position="center,center" size="1280,720" flags="wfNoBorder">
-	  <widget render="Label" source="title_label" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
+	  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
 	  <widget name="media" position="20,50" size="1240,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="left" valign="center" />
-	  <widget name="folderlist" position="20,105" size="1240,570" transparent="1" scrollbarMode="showOnDemand" />
+	  <widget name="folderlist" position="20,105" size="1240,560" transparent="1" scrollbarMode="showOnDemand" />
 	  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
 	  <ePixmap position="59,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
@@ -306,7 +303,6 @@ class mediaInfoFolderScreen(Screen):
 			"cancel": self.red
 		}, -1)
 		self.setTitle("Choose Download folder")
-		self["title_label"] = StaticText("Choose Download folder")
 		self["key_red"] = Label("Cancel")
 		self["key_green"] = Label("Ok")
 
@@ -348,94 +344,112 @@ class mediaInfoFolderScreen(Screen):
 		currFolder = self["folderlist"].getSelection()[0]
 		self["media"].setText(currFolder)
 
-def ListEntry(entry):
-	if isDreamOS:
-		sizes = componentSizes[mediaInfo.SKIN_COMPONENT_KEY]
-		filenameHeight = sizes.get(mediaInfo.SKIN_COMPONENT_FILENAME_HEIGHT, 70)
-		textHeight = sizes.get(mediaInfo.SKIN_COMPONENT_TEXT_HEIGHT, 35)
-		textHPos = sizes.get(mediaInfo.SKIN_COMPONENT_TEXT_HPOS, 0)
-		progressHPos = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_HPOS, 7)
-		progressHeight = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_HEIGHT, 20)
-		progressWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, 160)
-		filenameWidth = sizes.get(mediaInfo.SKIN_COMPONENT_FILENAME_WIDTH, 850)
-		statusWidth = sizes.get(mediaInfo.SKIN_COMPONENT_STATUS_WIDTH, 200)
-		mbinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_MBINFO_WIDTH, 280)
-		dlinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 160)
-		progressinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, 80)
-		listWidth = sizes.get(mediaInfo.SKIN_COMPONENT_LIST_WIDTH, 1270)
-		spacerWidth = sizes.get(mediaInfo.SKIN_COMPONENT_SPACER_WIDTH, 10)
-	else:
-		filenameHeight = 70
-		textHeight = 35
-		textHPos = 0
-		progressHPos = 7
-		progressHeight = 20
-		progressWidth = 160
-		filenameWidth = 850
-		statusWidth = 200
-		mbinfoWidth = 280
-		dlinfoWidth = 160
-		progressinfoWidth = 80
-		listWidth = 1270
-		spacerWidth = 10
-
-	(filename, status, progress, dlspeed, currentSizeMB, totalMB) = entry
-	if status == "Download":
-		mbinfo = "%s MB/%s MB" % (str(currentSizeMB), str(totalMB))
-		dlinfo = "%s" % dlspeed
-		prog = int(progress)
-		proginfo = str(progress)+"%"
-	elif status == "Complete":
-		mbinfo = ""
-		dlinfo = ""
-		prog = 100
-		proginfo = "100%"
-	else:
-		mbinfo = ""
-		dlinfo = ""
-		prog = 0
-		proginfo = "0%"
-
-	return [entry,
-	(eListboxPythonMultiContent.TYPE_TEXT, 0, textHPos, filenameWidth, filenameHeight, 0, RT_HALIGN_LEFT | RT_WRAP, filename),
-	(eListboxPythonMultiContent.TYPE_PROGRESS, listWidth-progressWidth-progressinfoWidth-statusWidth-2*spacerWidth, progressHPos, progressWidth, progressHeight, prog),
-	(eListboxPythonMultiContent.TYPE_TEXT, listWidth-progressinfoWidth-statusWidth-spacerWidth, textHPos, progressinfoWidth, textHeight, 0, RT_HALIGN_RIGHT | RT_VALIGN_CENTER, proginfo),
-	(eListboxPythonMultiContent.TYPE_TEXT, listWidth-statusWidth, textHPos, statusWidth, textHeight, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, status),
-	(eListboxPythonMultiContent.TYPE_TEXT, listWidth-progressWidth-progressinfoWidth-statusWidth-2*spacerWidth, textHPos+textHeight, mbinfoWidth, textHeight, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, mbinfo),
-	(eListboxPythonMultiContent.TYPE_TEXT, listWidth-dlinfoWidth, textHPos+textHeight, dlinfoWidth, textHeight, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, dlinfo),
-	]
-
 class mediaInfo(Screen):
-	skin = """
-	<screen name="MediaInfo" title="" position="center,center" size="1280,720" flags="wfNoBorder">
-	  <widget render="Label" source="title_label" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
-	  <widget name="head" position="0,50" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
-	  <widget name="downloadList" position="5,105" size="1270,570" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
-	  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <widget name="key_yellow" position="761,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <widget name="key_blue" position="1073,684" size="200,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <ePixmap position="59,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
-	  <ePixmap position="374,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
-	  <ePixmap position="726,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
-	  <ePixmap position="1037,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
-	</screen>"""
+	desktopSize = getDesktop(0).size()
+	if desktopSize.width() == 1920:
+		skin = """
+		<screen name="MediaInfo" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
+		  <widget name="head" position="0,64" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
+		  <widget name="downloadList" position="15,140" size="1890,700" itemHeight="80" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
+		  <widget name="key_red" position="90,1005" size="330,38" zPosition="1" font="Regular;26" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_green" position="560,1005" size="330,38" zPosition="1" font="Regular;26" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_yellow" position="1030,1005" size="330,38" zPosition="1" font="Regular;26" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_blue" position="1500,1005" size="330,38" zPosition="1" font="Regular;26" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <ePixmap position="50,1011" size="26,26" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
+		  <ePixmap position="520,1011" size="26,26" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
+		  <ePixmap position="990,1011" size="26,26" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
+		  <ePixmap position="1460,1011" size="26,26" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
+		</screen>"""
+	else:
+		skin = """
+		<screen name="MediaInfo" title="" position="center,center" size="1280,720" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
+		  <widget name="head" position="0,50" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
+		  <widget name="downloadList" position="10,105" size="1260,560" itemHeight="50" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
+		  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_yellow" position="761,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_blue" position="1073,684" size="200,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <ePixmap position="59,688" size="22,22" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
+		  <ePixmap position="374,688" size="22,22" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
+		  <ePixmap position="726,688" size="22,22" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
+		  <ePixmap position="1037,688" size="22,22" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
+		</screen>"""
 
 	if isDreamOS:
 		SKIN_COMPONENT_KEY = "MediaInfoList"
-		SKIN_COMPONENT_FILENAME_HEIGHT = "filenameHeight"
-		SKIN_COMPONENT_TEXT_HEIGHT = "textHeight"
-		SKIN_COMPONENT_TEXT_HPOS = "textHPos"
-		SKIN_COMPONENT_PROGRESS_HPOS = "progressHPos"
 		SKIN_COMPONENT_PROGRESS_HEIGHT = "progressHeight"
 		SKIN_COMPONENT_PROGRESS_WIDTH = "progressWidth"
-		SKIN_COMPONENT_FILENAME_WIDTH = "filenameWidth"
 		SKIN_COMPONENT_STATUS_WIDTH = "statusWidth"
 		SKIN_COMPONENT_MBINFO_WIDTH = "mbinfoWidth"
 		SKIN_COMPONENT_DLINFO_WIDTH = "dlinfoWidth"
 		SKIN_COMPONENT_PROGRESSINFO_WIDTH = "progressinfoWidth"
-		SKIN_COMPONENT_LIST_WIDTH = "listWidth"
 		SKIN_COMPONENT_SPACER_WIDTH = "spacerWidth"
+
+	def ListEntry(self, entry):
+		desktopSize = getDesktop(0).size()
+		if desktopSize.width() == 1920:
+			sizefactor = 3
+			zoomfactor = 1.25
+		else:
+			sizefactor = 1
+			zoomfactor = 1
+
+		width = self['downloadList'].instance.size().width()
+		height = self['downloadList'].l.getItemSize().height()
+		listWidth = width
+		itemHeight = height
+		textHeight = itemHeight/2
+		self.ml.l.setItemHeight(itemHeight)
+		if isDreamOS:
+			sizes = componentSizes[mediaInfo.SKIN_COMPONENT_KEY]
+			progressHeight = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_HEIGHT, int(16*zoomfactor))
+			progressHPos = int((textHeight-progressHeight)/2)
+			progressWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, int(128*zoomfactor))
+			statusWidth = sizes.get(mediaInfo.SKIN_COMPONENT_STATUS_WIDTH, int(144*zoomfactor))
+			mbinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_MBINFO_WIDTH, int(208*zoomfactor))
+			dlinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, int(128*zoomfactor))
+			progressinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, int(64*zoomfactor))
+			spacerWidth = sizes.get(mediaInfo.SKIN_COMPONENT_SPACER_WIDTH, int(8*zoomfactor))
+			tlf = TemplatedListFonts()
+			self.ml.l.setFont(0, gFont(tlf.face(tlf.MEDIUM), tlf.size(tlf.MEDIUM)))
+		else:
+			progressHeight = int(16*zoomfactor)
+			progressHPos = int((textHeight-progressHeight)/2)
+			progressWidth = int(128*zoomfactor)
+			statusWidth = int(144*zoomfactor)
+			mbinfoWidth = int(208*zoomfactor)
+			dlinfoWidth = int(128*zoomfactor)
+			progressinfoWidth = int(64*zoomfactor)
+			spacerWidth = int(8*zoomfactor)
+			self.ml.l.setFont(0, gFont('Regular', textHeight - 2 * sizefactor))
+
+		(filename, status, progress, dlspeed, currentSizeMB, totalMB) = entry
+		if status == "Download":
+			mbinfo = "%s MB/%s MB" % (str(currentSizeMB), str(totalMB))
+			dlinfo = "%s" % dlspeed
+			prog = int(progress)
+			proginfo = str(progress)+"%"
+		elif status == "Complete":
+			mbinfo = ""
+			dlinfo = ""
+			prog = 100
+			proginfo = "100%"
+		else:
+			mbinfo = ""
+			dlinfo = ""
+			prog = 0
+			proginfo = "0%"
+
+		return [entry,
+		(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, listWidth-progressWidth-progressinfoWidth-statusWidth-3*spacerWidth, itemHeight, 0, RT_HALIGN_LEFT | RT_WRAP, filename),
+		(eListboxPythonMultiContent.TYPE_PROGRESS, listWidth-progressWidth-progressinfoWidth-statusWidth-2*spacerWidth, progressHPos, progressWidth, progressHeight, prog),
+		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-progressinfoWidth-statusWidth-spacerWidth, 0, progressinfoWidth, textHeight, 0, RT_HALIGN_RIGHT | RT_VALIGN_CENTER, proginfo),
+		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-statusWidth, 0, statusWidth, textHeight, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, status),
+		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-progressWidth-progressinfoWidth-statusWidth-2*spacerWidth, textHeight, mbinfoWidth, textHeight, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, mbinfo),
+		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-dlinfoWidth, textHeight, dlinfoWidth, textHeight, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, dlinfo),
+		]
 
 	def __init__(self, session, livestreaming):
 		Screen.__init__(self, session)
@@ -443,7 +457,6 @@ class mediaInfo(Screen):
 		self.session = session
 
 		self['head'] = Label()
-		self['title_label'] = StaticText()
 		self['key_red'] = Label("Remove")
 		self['key_green'] = Label("Download")
 		self['key_yellow'] = Label("Start/Stop")
@@ -451,15 +464,8 @@ class mediaInfo(Screen):
 
 		global joblist
 		self.dllist = []
-		self.channelMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
-		if isDreamOS:
-			tlf = TemplatedListFonts()
-			self.channelMenuList.l.setFont(0, gFont(tlf.face(tlf.MEDIUM), tlf.size(tlf.MEDIUM)))
-			self.channelMenuList.l.setItemHeight(componentSizes.itemHeight(self.SKIN_COMPONENT_KEY, 70))
-		else:
-			self.channelMenuList.l.setFont(0, gFont('Regular', 20))
-			self.channelMenuList.l.setItemHeight(70)
-		self['downloadList'] = self.channelMenuList
+		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
+		self['downloadList'] = self.ml
 
 		self["actions"]  = ActionMap(["MI_Actions"], {
 			"ok"	:	self.exit,
@@ -474,7 +480,6 @@ class mediaInfo(Screen):
 
 		self.refreshTimer = eTimer()
 		self.setTitle(pname + " " + pversion)
-		self['title_label'].setText(pname + " " + pversion)
 		if isDreamOS:
 			self.refreshTimer_conn1 = self.refreshTimer.timeout.connect(self.showJobs)
 		else:
@@ -548,7 +553,7 @@ class mediaInfo(Screen):
 		info = "Downloads: %s/%s (%s) - Wait: %s - Complete: %s - Error: %s" % (str(showDownload), str(len(joblist)), str(config.plugins.mediainfo.dllimit.value), str(showWait), str(showComplete), str(showError))
 		self["head"].setText(info)
 		self.taskList = self.dllist + self.waitlist + self.completelist + self.errorlist
-		self.channelMenuList.setList(map(ListEntry, self.taskList))
+		self.ml.setList(map(self.ListEntry, self.taskList))
 
 	def calcDnSpeed(self, starttime, currentSizeMB, totalMB):
 		endtime = int(time.time())
@@ -646,9 +651,6 @@ class mediaInfo(Screen):
 		else:
 			return str(byte)+" "+ending
 
-	def dataError(self, error):
-		print error
-
 	def mediaInfoSetup(self):
 		self.session.open(mediaInfoConfigScreen)
 
@@ -676,7 +678,6 @@ def autostart(reason, **kwargs):
 	global downloadsfile
 	if (reason == 0) and (kwargs.has_key("session")):
 		session = kwargs["session"]
-		session = session
 		global joblist
 		print "[MediaInfo] READ OLD JOBS !!!"
 		if fileExists(downloadsfile):
