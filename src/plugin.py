@@ -351,22 +351,22 @@ class mediaInfo(Screen):
 		<screen name="MediaInfo" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
 		  <widget name="head" position="0,64" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
-		  <widget name="downloadList" position="15,140" size="1890,700" itemHeight="80" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
-		  <widget name="key_red" position="90,1005" size="330,38" zPosition="1" font="Regular;26" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_green" position="560,1005" size="330,38" zPosition="1" font="Regular;26" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_yellow" position="1030,1005" size="330,38" zPosition="1" font="Regular;26" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_blue" position="1500,1005" size="330,38" zPosition="1" font="Regular;26" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <ePixmap position="50,1011" size="26,26" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
-		  <ePixmap position="520,1011" size="26,26" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
-		  <ePixmap position="990,1011" size="26,26" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
-		  <ePixmap position="1460,1011" size="26,26" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
+		  <widget name="downloadList" position="15,150" size="1890,840" itemHeight="70" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
+		  <widget name="key_red" position="190,1005" size="250,38" zPosition="1" font="Regular;28" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_green" position="660,1005" size="250,38" zPosition="1" font="Regular;28" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_yellow" position="1130,1005" size="250,38" zPosition="1" font="Regular;28" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <widget name="key_blue" position="1600,1005" size="250,38" zPosition="1" font="Regular;28" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
+		  <ePixmap position="150,1010" size="28,28" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
+		  <ePixmap position="620,1010" size="28,28" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
+		  <ePixmap position="1090,1010" size="28,28" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
+		  <ePixmap position="1560,1010" size="28,28" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
 		</screen>"""
 	else:
 		skin = """
 		<screen name="MediaInfo" title="" position="center,center" size="1280,720" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
 		  <widget name="head" position="0,50" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
-		  <widget name="downloadList" position="10,105" size="1260,560" itemHeight="50" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
+		  <widget name="downloadList" position="10,115" size="1260,550" itemHeight="50" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
 		  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
 		  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
 		  <widget name="key_yellow" position="761,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
