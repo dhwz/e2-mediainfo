@@ -1,12 +1,13 @@
 ﻿# -*- coding: utf-8 -*-
 #######################################################################
 # maintainer: einfall
-#This plugin is free software, you are allowed to
-#modify it (if you keep the license),
-#but you are not allowed to distribute/publish
-#it without source code (this version and your modifications).
-#This means you also have to distribute
-#source code of your modifications.
+#
+# This plugin is free software, you are allowed to
+# modify it (if you keep the license),
+# but you are not allowed to distribute/publish
+# it without source code (this version and your modifications).
+# This means you also have to distribute
+# source code of your modifications.
 #######################################################################
 
 from Components.Label import Label
@@ -22,11 +23,11 @@ from Screens.InfoBar import MoviePlayer
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from enigma import gFont, getDesktop, eTimer, eConsoleAppContainer, ePicLoad, eListboxPythonMultiContent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
-from Tools.Directories import pathExists, fileExists
+from Tools.Directories import fileExists
 from Tools.BoundFunction import boundFunction
+from Tools.Downloader import downloadWithProgress
 
 import urllib, urllib2, re, os, time, datetime, glob, random, string
-from Tools.Downloader import downloadWithProgress
 
 from twisted.web.client import getPage, error
 from twisted.internet import defer
@@ -68,8 +69,7 @@ class downloadTask(Thread):
 		self.progress = 0
 		self.recvbytes = 0
 		self.totalbytes = 0
-		self.path = config.plugins.mediainfo.savetopath.value
-		self.local = "%s%s" % (self.path, self.filename)
+		self.local = "%s%s" % (config.plugins.mediainfo.savetopath.value, self.filename)
 		self.stop_manuell = False
 		Thread.__init__(self)
 
@@ -548,28 +548,36 @@ class mediaInfo(Screen):
 			filetype = ".mp4"
 		filename = "%s%s" % (filename.replace(' ','_'), filetype)
 
-		if not any(filename in job for job in joblist):
-			if re.match('.*?http', url, re.S) and not re.match('.*?m3u8', url, re.S):
-				try:
-					req = urllib2.Request(url, headers={'Content-Type':'application/x-www-form-urlencoded', 'User-agent':'Mozilla/5.0 (Windows NT 6.1; rv:32.0) Gecko/20100101 Firefox/32.0'})
-					res = urllib2.urlopen(req)
-					url = res.geturl()
-					print "[Download] added: %s - %s" % (filename, url)
-					self.addJob = downloadTask(self.session, filename, url, "stream", None)
-					global joblist
-					joblist.append((filename, int(time.time()), "Wait", url, "stream", None, self.addJob))
-					self.jobDownload(filename)
-					self.backupJobs()
-				except urllib2.HTTPError, error:
-					print error
-					message = self.session.open(MessageBox, ("Error: %s" % error), MessageBox.TYPE_INFO, timeout=3)
-				except urllib2.URLError, error:
-					print error.reason
-					message = self.session.open(MessageBox, ("Error: %s" % error.reason), MessageBox.TYPE_INFO, timeout=3)
-			else:
-				message = self.session.open(MessageBox, ("No rtmp/m3u8 download support, only http protocol."), MessageBox.TYPE_INFO, timeout=3)
+		local = "%s%s" % (config.plugins.mediainfo.savetopath.value, filename)
+		if fileExists(local):
+			self.session.openWithCallback(boundFunction(self.jobStartContinue, filename, url), MessageBox, "File already exists, do you want to overwrite the existing file?", MessageBox.TYPE_YESNO)
 		else:
-			print "[MediaInfo] dupe: %s" % filename
+			self.jobStartContinue(True, filename, url)
+
+	def jobStartContinue(self, filename, url, answer):
+		if answer is True:
+			if not any(filename in job for job in joblist):
+				if re.match('.*?http', url, re.S) and not re.match('.*?m3u8', url, re.S):
+					try:
+						req = urllib2.Request(url, headers={'Content-Type':'application/x-www-form-urlencoded', 'User-agent':'Mozilla/5.0 (Windows NT 6.1; rv:32.0) Gecko/20100101 Firefox/32.0'})
+						res = urllib2.urlopen(req)
+						url = res.geturl()
+						print "[Download] added: %s - %s" % (filename, url)
+						self.addJob = downloadTask(self.session, filename, url, "stream", None)
+						global joblist
+						joblist.append((filename, int(time.time()), "Wait", url, "stream", None, self.addJob))
+						self.jobDownload(filename)
+						self.backupJobs()
+					except urllib2.HTTPError, error:
+						print error
+						message = self.session.open(MessageBox, ("Error: %s" % error), MessageBox.TYPE_INFO, timeout=3)
+					except urllib2.URLError, error:
+						print error.reason
+						message = self.session.open(MessageBox, ("Error: %s" % error.reason), MessageBox.TYPE_INFO, timeout=3)
+				else:
+					message = self.session.open(MessageBox, ("No rtmp/m3u8 download support, only http protocol."), MessageBox.TYPE_INFO, timeout=3)
+			else:
+				print "[MediaInfo] dupe: %s" % filename
 
 	def showJobs(self):
 		self.taskList = []
