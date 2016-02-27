@@ -239,7 +239,7 @@ class MediaInfoConfigScreen(Screen, ConfigListScreen):
 		ConfigListScreen.__init__(self, self.list)
 
 	def createConfigList(self):
-		self.setTitle(pname + " Setup " + pversion)
+		self.setTitle(pname + " " + "Setup")
 		self.list = []
 		self.list.append(getConfigListEntry("Save Downloads to:", config.plugins.mediainfo.savetopath))
 		self.list.append(getConfigListEntry("Show 'Download Complete' Message:", config.plugins.mediainfo.donemsg))
@@ -335,7 +335,7 @@ class MediaInfoFolderScreen(Screen):
 			"red": self.red,
 			"cancel": self.red
 		}, -1)
-		self.setTitle(pname + " " + pversion + " - " + "Download folder selection")
+		self.setTitle(pname + " - " + "Download folder")
 		self["key_red"] = Label("Cancel")
 		self["key_green"] = Label("Save")
 		self["key_yellow"] = Label()
