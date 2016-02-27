@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 #######################################################################
-# maintainer: einfall
+# maintainers: einfall/dhwz
 #
 # This plugin is free software, you are allowed to
 # modify it (if you keep the license),
@@ -11,7 +11,6 @@
 #######################################################################
 from . import _
 from Components.Label import Label
-from Components.ScrollLabel import ScrollLabel
 from Components.ConfigList import ConfigListScreen
 from Components.ActionMap import ActionMap
 from Components.config import config, getConfigListEntry, ConfigText, ConfigInteger, ConfigYesNo, ConfigSubsection, configfile
@@ -22,15 +21,12 @@ from Plugins.Plugin import PluginDescriptor
 from Screens.InfoBar import MoviePlayer
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-from enigma import gFont, getDesktop, eTimer, eConsoleAppContainer, ePicLoad, eListboxPythonMultiContent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
+from enigma import gFont, getDesktop, eTimer, eListboxPythonMultiContent, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP
 from Tools.Directories import fileExists
 from Tools.BoundFunction import boundFunction
 from Tools.Downloader import downloadWithProgress
 
-import urllib, urllib2, re, os, time, datetime, glob, random, string
-
-from twisted.web.client import getPage, error
-from twisted.internet import defer
+import urllib2, re, os, time, random, string
 
 from threading import Thread
 
