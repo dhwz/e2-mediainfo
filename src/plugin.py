@@ -9,7 +9,7 @@
 # This means you also have to distribute
 # source code of your modifications.
 #######################################################################
-
+from . import _
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
 from Components.ConfigList import ConfigListScreen
@@ -93,7 +93,7 @@ class downloadTask(Thread):
 		if self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
 			if len(joblist) > 0:
 				for (filename, starttime, status, url, downloadName, job) in joblist:
-					if status == "Wait" and self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
+					if status == _("Wait") and self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
 						if job.start(filename):
 							print "mark as download", filename
 							self.markJobAsDownload(filename)
@@ -102,7 +102,7 @@ class downloadTask(Thread):
 		countRuningJobs = 0
 		if len(joblist) > 0:
 			for (filename, starttime, status, url, downloadName, job) in joblist:
-				if status == "Download":
+				if status == _("Download"):
 					countRuningJobs += 1
 		return countRuningJobs
 
@@ -111,7 +111,7 @@ class downloadTask(Thread):
 		if len(joblist) > 0:
 			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if filename == change_filename:
-					joblist_tmp.append((filename, int(time.time()), "Download", url, downloadName, job))
+					joblist_tmp.append((filename, int(time.time()), _("Download"), url, downloadName, job))
 				else:
 					joblist_tmp.append((filename, starttime, status, url, downloadName, job))
 			global joblist
@@ -122,7 +122,7 @@ class downloadTask(Thread):
 		if len(joblist) > 0:
 			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if filename == change_filename:
-					joblist_tmp.append((filename, starttime, "Complete", url, downloadName, job))
+					joblist_tmp.append((filename, starttime, _("Complete"), url, downloadName, job))
 				else:
 					joblist_tmp.append((filename, starttime, status, url, downloadName, job))
 			global joblist
@@ -133,7 +133,7 @@ class downloadTask(Thread):
 		if len(joblist) > 0:
 			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if filename == change_filename:
-					joblist_tmp.append((filename, starttime, "Error", url, downloadName, job))
+					joblist_tmp.append((filename, starttime, _("Error"), url, downloadName, job))
 				else:
 					joblist_tmp.append((filename, starttime, status, url, downloadName, job))
 			global joblist
@@ -164,7 +164,7 @@ class downloadTask(Thread):
 			if self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
 				self.startNextJob()
 			if config.plugins.mediainfo.donemsg.value:
-				message = self.session.open(MessageBox, "MediaInfo: %s Download Complete." % self.filename, MessageBox.TYPE_INFO, timeout=4)
+				message = self.session.open(MessageBox, _("MediaInfo: %s Download Complete.") % self.filename, MessageBox.TYPE_INFO, timeout=5)
 
 	def http_failed(self, failure_instance=None, error_message=""):
 		if error_message == "" and failure_instance is not None:
@@ -229,8 +229,8 @@ class MediaInfoConfigScreen(Screen, ConfigListScreen):
 			"right"	:	self.keyRight
 		}, -1)
 
-		self['key_red'] = Label("Cancel")
-		self['key_green'] = Label("Save")
+		self['key_red'] = Label(_("Cancel"))
+		self['key_green'] = Label(_("Save"))
 		self['key_yellow'] = Label()
 		self['key_blue'] = Label()
 
@@ -239,12 +239,12 @@ class MediaInfoConfigScreen(Screen, ConfigListScreen):
 		ConfigListScreen.__init__(self, self.list)
 
 	def createConfigList(self):
-		self.setTitle(pname + " " + "Setup")
+		self.setTitle(pname + " " + _("Setup"))
 		self.list = []
-		self.list.append(getConfigListEntry("Save Downloads to:", config.plugins.mediainfo.savetopath))
-		self.list.append(getConfigListEntry("Show 'Download Complete' Message:", config.plugins.mediainfo.donemsg))
-		self.list.append(getConfigListEntry("Parallel Downloads:", config.plugins.mediainfo.dllimit))
-		self.list.append(getConfigListEntry("Use original MediaInfo Skin:", config.plugins.mediainfo.origskin))
+		self.list.append(getConfigListEntry(_("Storagepath:"), config.plugins.mediainfo.savetopath))
+		self.list.append(getConfigListEntry(_("Show 'Download Complete' Message:"), config.plugins.mediainfo.donemsg))
+		self.list.append(getConfigListEntry(_("Number of parallel downloads:"), config.plugins.mediainfo.dllimit))
+		self.list.append(getConfigListEntry(_("Use original MediaInfo skin:"), config.plugins.mediainfo.origskin))
 
 	def changedEntry(self):
 		self.createConfigList()
@@ -335,9 +335,9 @@ class MediaInfoFolderScreen(Screen):
 			"red": self.red,
 			"cancel": self.red
 		}, -1)
-		self.setTitle(pname + " - " + "Download folder")
-		self["key_red"] = Label("Cancel")
-		self["key_green"] = Label("Save")
+		self.setTitle(pname + " - " + _("Download folder"))
+		self["key_red"] = Label(_("Cancel"))
+		self["key_green"] = Label(_("Save"))
 		self["key_yellow"] = Label()
 		self["key_blue"] = Label()
 
@@ -443,9 +443,9 @@ class MediaInfo(Screen):
 			progressHeight = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESS_HEIGHT, 16*zoomfactor)
 			progressHPos = (textHeight-progressHeight)/2
 			progressWidth = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, 128*zoomfactor)
-			statusWidth = sizes.get(MediaInfo.SKIN_COMPONENT_STATUS_WIDTH, 144*zoomfactor)
+			statusWidth = sizes.get(MediaInfo.SKIN_COMPONENT_STATUS_WIDTH, 160*zoomfactor)
 			mbinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_MBINFO_WIDTH, 208*zoomfactor)
-			dlinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 128*zoomfactor)
+			dlinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 144*zoomfactor)
 			progressinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, 64*zoomfactor)
 			spacerWidth = sizes.get(MediaInfo.SKIN_COMPONENT_SPACER_WIDTH, 8*zoomfactor)
 			tlf = TemplatedListFonts()
@@ -454,20 +454,20 @@ class MediaInfo(Screen):
 			progressHeight = 16*zoomfactor
 			progressHPos = (textHeight-progressHeight)/2
 			progressWidth = 128*zoomfactor
-			statusWidth = 144*zoomfactor
+			statusWidth = 160*zoomfactor
 			mbinfoWidth = 208*zoomfactor
-			dlinfoWidth = 128*zoomfactor
+			dlinfoWidth = 144*zoomfactor
 			progressinfoWidth = 64*zoomfactor
 			spacerWidth = 8*zoomfactor
 			self.ml.l.setFont(0, gFont('Regular', textHeight - 2 * sizefactor))
 
 		(filename, status, progress, dlspeed, currentSizeMB, totalMB) = entry
-		if status == "Download":
+		if status == _("Download"):
 			mbinfo = "%s MB/%s MB" % (str(currentSizeMB), str(totalMB))
 			dlinfo = "%s" % dlspeed
 			prog = int(progress)
 			proginfo = str(progress)+"%"
-		elif status == "Complete":
+		elif status == _("Complete"):
 			mbinfo = ""
 			dlinfo = ""
 			prog = 100
@@ -494,10 +494,10 @@ class MediaInfo(Screen):
 		self.session = session
 
 		self['head'] = Label()
-		self['key_red'] = Label("Remove")
-		self['key_green'] = Label("Download")
-		self['key_yellow'] = Label("Start/Stop")
-		self['key_blue'] = Label("Setup")
+		self['key_red'] = Label(_("Remove"))
+		self['key_green'] = Label(_("Download"))
+		self['key_yellow'] = Label(_("Start/Stop"))
+		self['key_blue'] = Label(_("Setup"))
 
 		self.dllist = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -553,17 +553,17 @@ class MediaInfo(Screen):
 						print "[Download] added: %s - %s" % (filename, url)
 						self.addJob = downloadTask(self.session, filename, url, None)
 						global joblist
-						joblist.append((filename, int(time.time()), "Wait", url, None, self.addJob))
+						joblist.append((filename, int(time.time()), _("Wait"), url, None, self.addJob))
 						self.jobDownload(filename)
 						self.backupJobs()
 					except urllib2.HTTPError, error:
 						print error
-						message = self.session.open(MessageBox, ("Error: %s" % error), MessageBox.TYPE_INFO, timeout=3)
+						message = self.session.open(MessageBox, (_("Error: %s") % error), MessageBox.TYPE_INFO, timeout=5)
 					except urllib2.URLError, error:
 						print error.reason
-						message = self.session.open(MessageBox, ("Error: %s" % error.reason), MessageBox.TYPE_INFO, timeout=3)
+						message = self.session.open(MessageBox, (_("Error: %s") % error.reason), MessageBox.TYPE_INFO, timeout=5)
 				else:
-					message = self.session.open(MessageBox, ("No rtmp/m3u8 download support, only http protocol."), MessageBox.TYPE_INFO, timeout=3)
+					message = self.session.open(MessageBox, (_("No rtmp/m3u8 download support, only http protocol downloads.")), MessageBox.TYPE_INFO, timeout=5)
 			else:
 				print "[MediaInfo] dupe: %s" % filename
 
@@ -578,23 +578,24 @@ class MediaInfo(Screen):
 		self.completelist = []
 		self.errorlist = []
 		for (filename, starttime, status, url, downloadName, job) in joblist:
-			if status == "Download":
+			if status == _("Download"):
 				showDownload += 1
 				(recvbytes, totalbytes, progress) = job.current_progress()
 				currentSizeMB = int(recvbytes/1024/1024)
 				totalMB = int(totalbytes/1024/1024)
 				dlspeed = self.calcDnSpeed(int(starttime), currentSizeMB, totalMB)
 				self.dllist.append((filename, status, progress, dlspeed, currentSizeMB, totalMB))
-			elif status == "Wait":
+			elif status == _("Wait"):
 				showWait += 1
 				self.waitlist.append((filename, status, 0, 0, 0, 0))
-			elif status == "Complete":
+			elif status == _("Complete"):
 				showComplete += 1
 				self.completelist.append((filename, status, 0, 0, 0, 0))
-			elif status == "Error":
+			elif status == _("Error"):
 				showError += 1
 				self.errorlist.append((filename, status, 0, 0, 0, 0))
-		info = "Downloads: %s/%s (%s) - Wait: %s - Complete: %s - Error: %s" % (str(showDownload), str(len(joblist)), str(config.plugins.mediainfo.dllimit.value), str(showWait), str(showComplete), str(showError))
+		info = _("Downloads") + ": %s/%s (%s) - " + _("Wait") + ": %s - " + _("Complete") + ": %s - " + _("Error") + ": %s"
+		info = info % (str(showDownload), str(len(joblist)), str(config.plugins.mediainfo.dllimit.value), str(showWait), str(showComplete), str(showError))
 		self["head"].setText(info)
 		self.taskList = self.dllist + self.waitlist + self.completelist + self.errorlist
 		self.ml.setList(map(self.ListEntry, self.taskList))
@@ -617,7 +618,7 @@ class MediaInfo(Screen):
 			return
 		filename = self['downloadList'].getCurrent()[0][0]
 		status = self['downloadList'].getCurrent()[0][1]
-		if status == "Download":
+		if status == _("Download"):
 			self.jobStop(filename, False)
 		else:
 			self.jobDownload(filename)
@@ -635,7 +636,7 @@ class MediaInfo(Screen):
 			if filename == change_filename:
 				job.stop()
 				if not remove:
-					joblist_tmp.append((filename, starttime, "Wait", url, downloadName, job))
+					joblist_tmp.append((filename, starttime, _("Wait"), url, downloadName, job))
 			else:
 				joblist_tmp.append((filename, starttime, status, url, downloadName, job))
 		global joblist
@@ -648,10 +649,10 @@ class MediaInfo(Screen):
 			return
 		check_filename = self['downloadList'].getCurrent()[0][0]
 		check_status = self['downloadList'].getCurrent()[0][1]
-		if check_status == "Download":
+		if check_status == _("Download"):
 			self.jobStop(check_filename, True)
 			self.showJobs()
-		elif check_status == "Wait" or "Complete" or "Error":
+		elif check_status == _("Wait") or _("Complete") or _("Error"):
 			joblist_tmp = []
 			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if not filename == check_filename:
@@ -706,10 +707,10 @@ def autostart(reason, **kwargs):
 					global joblist
 					(filename, status, url, downloadName) = data[0]
 					addJob = downloadTask(session, filename, url, downloadName)
-					if status == "Download":
-						joblist.append((filename, int(time.time()), "Wait", url, downloadName, addJob))
-					elif status == "Error":
-						joblist.append((filename, int(time.time()), "Wait", url, downloadName, addJob))
+					if status == _("Download"):
+						joblist.append((filename, int(time.time()), _("Wait"), url, downloadName, addJob))
+					elif status == _("Error"):
+						joblist.append((filename, int(time.time()), _("Wait"), url, downloadName, addJob))
 					else:
 						joblist.append((filename, int(time.time()), status, url, downloadName, addJob))
 		else:
