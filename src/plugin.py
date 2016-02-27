@@ -552,7 +552,7 @@ class mediaInfo(Screen):
 		if fileExists(local):
 			self.session.openWithCallback(boundFunction(self.jobStartContinue, filename, url), MessageBox, "File already exists, do you want to overwrite the existing file?", MessageBox.TYPE_YESNO)
 		else:
-			self.jobStartContinue(True, filename, url)
+			self.jobStartContinue(filename, url, True)
 
 	def jobStartContinue(self, filename, url, answer):
 		if answer is True:
