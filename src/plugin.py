@@ -43,11 +43,9 @@ except:
 pname = "MediaInfo"
 pversion = "3.0.0"
 
-global joblist
 joblist = []
 
-global downloadsfile
-downloadsfile = "/usr/lib/enigma2/python/Plugins/Extensions/mediainfo/downloads"
+downloadsfile = "/usr/lib/enigma2/python/Plugins/Extensions/MediaInfo/downloads"
 
 already_open = False
 MoviePlayer.originalOpenEventView = MoviePlayer.openEventView
@@ -59,12 +57,11 @@ config.plugins.mediainfo.dllimit = ConfigInteger(default = 2, limits = (1,20))
 config.plugins.mediainfo.savetopath = ConfigText(default = "/media/hdd/movie/",  fixed_size=False)
 
 class downloadTask(Thread):
-	def __init__(self, session, filename, url, hoster, downloadName):
+	def __init__(self, session, filename, url, downloadName):
 		self.session = session
 		self.filename = filename
 		self.url = url
 		self.downloadName = downloadName
-		self.hoster = hoster
 		self.end = 100
 		self.progress = 0
 		self.recvbytes = 0
@@ -94,54 +91,52 @@ class downloadTask(Thread):
 	def startNextJob(self):
 		print "[MediaInfo] Check for Next Download."
 		if self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
-			global joblist
 			if len(joblist) > 0:
-				for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+				for (filename, starttime, status, url, downloadName, job) in joblist:
 					if status == "Wait" and self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
 						if job.start(filename):
 							print "mark as download", filename
 							self.markJobAsDownload(filename)
 
 	def checkRunningJobs(self):
-		global joblist
 		countRuningJobs = 0
 		if len(joblist) > 0:
-			for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if status == "Download":
 					countRuningJobs += 1
 		return countRuningJobs
 
 	def markJobAsDownload(self, change_filename):
 		joblist_tmp = []
-		global joblist
 		if len(joblist) > 0:
-			for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if filename == change_filename:
-					joblist_tmp.append((filename, int(time.time()), "Download", url, hoster, downloadName, job))
+					joblist_tmp.append((filename, int(time.time()), "Download", url, downloadName, job))
 				else:
-					joblist_tmp.append((filename, starttime, status, url, hoster, downloadName, job))
+					joblist_tmp.append((filename, starttime, status, url, downloadName, job))
+			global joblist
 			joblist = joblist_tmp
 
 	def markJobAsFinish(self, change_filename):
 		joblist_tmp = []
-		global joblist
 		if len(joblist) > 0:
-			for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if filename == change_filename:
-					joblist_tmp.append((filename, starttime, "Complete", url, hoster, downloadName, job))
+					joblist_tmp.append((filename, starttime, "Complete", url, downloadName, job))
 				else:
-					joblist_tmp.append((filename, starttime, status, url, hoster, downloadName, job))
+					joblist_tmp.append((filename, starttime, status, url, downloadName, job))
+			global joblist
 			joblist = joblist_tmp
 
 	def markJobAsError(self, change_filename):
 		joblist_tmp = []
-		global joblist
 		if len(joblist) > 0:
-			for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if filename == change_filename:
-					joblist_tmp.append((filename, starttime, "Error", url, hoster, downloadName, job))
+					joblist_tmp.append((filename, starttime, "Error", url, downloadName, job))
 				else:
-					joblist_tmp.append((filename, starttime, status, url, hoster, downloadName, job))
+					joblist_tmp.append((filename, starttime, status, url, downloadName, job))
+			global joblist
 			joblist = joblist_tmp
 			self.backupJobs()
 
@@ -179,17 +174,16 @@ class downloadTask(Thread):
 				self.markJobAsError(self.filename)
 
 	def backupJobs(self):
-		global downloadsfile
 		if len(joblist) > 0:
 			if fileExists(downloadsfile):
 				download_file = open(downloadsfile, "w")
-				for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
-					download_file.write('"%s" "%s" "%s" "%s" "%s"\n' % (filename, status, url, hoster, downloadName))
+				for (filename, starttime, status, url, downloadName, job) in joblist:
+					download_file.write('"%s" "%s" "%s" "%s"\n' % (filename, status, url, downloadName))
 				download_file.close()
 		else:
 			download_file = open(downloadsfile, "w").close()
 
-class mediaInfoConfigScreen(Screen, ConfigListScreen):
+class MediaInfoConfigScreen(Screen, ConfigListScreen):
 	desktopSize = getDesktop(0).size()
 	if desktopSize.width() >= 1920:
 		skin = """
@@ -225,7 +219,7 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 		if config.plugins.mediainfo.origskin.value:
 			self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
 		else:
-			self.skinName = "mediaInfoConfigScreenV3"
+			self.skinName = "MediaInfoConfigScreen"
 		self.session = session
 
 		self["actions"] = ActionMap(["MI_Actions"], {
@@ -261,7 +255,7 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 	def ok(self):
 		ConfigListScreen.keyOK(self)
 		if self['config'].getCurrent()[1] == config.plugins.mediainfo.savetopath:
-			self.session.openWithCallback(self.selectedMediaFile, mediaInfoFolderScreen, config.plugins.mediainfo.savetopath.value)
+			self.session.openWithCallback(self.selectedMediaFile, MediaInfoFolderScreen, config.plugins.mediainfo.savetopath.value)
 
 	def selectedMediaFile(self, res):
 		if res is not None:
@@ -289,7 +283,7 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 	def cancel(self):
 		self.close()
 
-class mediaInfoFolderScreen(Screen):
+class MediaInfoFolderScreen(Screen):
 	desktopSize = getDesktop(0).size()
 	if desktopSize.width() >= 1920:
 		skin = """
@@ -389,7 +383,7 @@ class mediaInfoFolderScreen(Screen):
 		currFolder = self["folderlist"].getSelection()[0]
 		self["media"].setText(currFolder)
 
-class mediaInfo(Screen):
+class MediaInfo(Screen):
 	desktopSize = getDesktop(0).size()
 	if desktopSize.width() >= 1920:
 		skin = """
@@ -449,15 +443,15 @@ class mediaInfo(Screen):
 		textHeight = itemHeight/2
 		self.ml.l.setItemHeight(itemHeight)
 		if isDreamOS:
-			sizes = componentSizes[mediaInfo.SKIN_COMPONENT_KEY]
-			progressHeight = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_HEIGHT, 16*zoomfactor)
+			sizes = componentSizes[MediaInfo.SKIN_COMPONENT_KEY]
+			progressHeight = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESS_HEIGHT, 16*zoomfactor)
 			progressHPos = (textHeight-progressHeight)/2
-			progressWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, 128*zoomfactor)
-			statusWidth = sizes.get(mediaInfo.SKIN_COMPONENT_STATUS_WIDTH, 144*zoomfactor)
-			mbinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_MBINFO_WIDTH, 208*zoomfactor)
-			dlinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 128*zoomfactor)
-			progressinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, 64*zoomfactor)
-			spacerWidth = sizes.get(mediaInfo.SKIN_COMPONENT_SPACER_WIDTH, 8*zoomfactor)
+			progressWidth = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, 128*zoomfactor)
+			statusWidth = sizes.get(MediaInfo.SKIN_COMPONENT_STATUS_WIDTH, 144*zoomfactor)
+			mbinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_MBINFO_WIDTH, 208*zoomfactor)
+			dlinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 128*zoomfactor)
+			progressinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, 64*zoomfactor)
+			spacerWidth = sizes.get(MediaInfo.SKIN_COMPONENT_SPACER_WIDTH, 8*zoomfactor)
 			tlf = TemplatedListFonts()
 			self.ml.l.setFont(0, gFont(tlf.face(tlf.MEDIUM), tlf.size(tlf.MEDIUM)))
 		else:
@@ -497,12 +491,12 @@ class mediaInfo(Screen):
 		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-dlinfoWidth, textHeight, dlinfoWidth, textHeight, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, dlinfo),
 		]
 
-	def __init__(self, session, livestreaming):
+	def __init__(self, session):
 		Screen.__init__(self, session)
 		if config.plugins.mediainfo.origskin.value:
 			self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
 		else:
-			self.skinName = "mediaInfoV3"
+			self.skinName = "MediaInfo"
 		self.session = session
 
 		self['head'] = Label()
@@ -511,7 +505,6 @@ class mediaInfo(Screen):
 		self['key_yellow'] = Label("Start/Stop")
 		self['key_blue'] = Label("Setup")
 
-		global joblist
 		self.dllist = []
 		self.ml = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self['downloadList'] = self.ml
@@ -551,6 +544,7 @@ class mediaInfo(Screen):
 		local = "%s%s" % (config.plugins.mediainfo.savetopath.value, filename)
 		if fileExists(local):
 			self.session.openWithCallback(boundFunction(self.jobStartContinue, filename, url), MessageBox, "File already exists, do you want to overwrite the existing file?", MessageBox.TYPE_YESNO)
+			print "[MediaInfo] file already exists: %s" % filename
 		else:
 			self.jobStartContinue(filename, url, True)
 
@@ -563,9 +557,9 @@ class mediaInfo(Screen):
 						res = urllib2.urlopen(req)
 						url = res.geturl()
 						print "[Download] added: %s - %s" % (filename, url)
-						self.addJob = downloadTask(self.session, filename, url, "stream", None)
+						self.addJob = downloadTask(self.session, filename, url, None)
 						global joblist
-						joblist.append((filename, int(time.time()), "Wait", url, "stream", None, self.addJob))
+						joblist.append((filename, int(time.time()), "Wait", url, None, self.addJob))
 						self.jobDownload(filename)
 						self.backupJobs()
 					except urllib2.HTTPError, error:
@@ -581,7 +575,6 @@ class mediaInfo(Screen):
 
 	def showJobs(self):
 		self.taskList = []
-		global joblist
 		showDownload = 0
 		showWait = 0
 		showComplete = 0
@@ -590,7 +583,7 @@ class mediaInfo(Screen):
 		self.waitlist = []
 		self.completelist = []
 		self.errorlist = []
-		for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+		for (filename, starttime, status, url, downloadName, job) in joblist:
 			if status == "Download":
 				showDownload += 1
 				(recvbytes, totalbytes, progress) = job.current_progress()
@@ -617,10 +610,7 @@ class mediaInfo(Screen):
 		runtime = endtime - int(starttime)
 		if runtime == 0:
 			runtime = 1
-		#if currentSizeMB == 0:
-		#	currentSizeMB = 1
 		dlspeed = (currentSizeMB * 1024) / runtime
-		#resttime = (((int(totalMB) - currentSizeMB) * 1024) / (currentSizeMB * 1024)) * runtime
 		if dlspeed > 1024:
 			dlspeed = "%.2f MB/s" % (float(dlspeed) / 1024)
 		else:
@@ -639,24 +629,22 @@ class mediaInfo(Screen):
 			self.jobDownload(filename)
 
 	def jobDownload(self, change_filename):
-		global joblist
-		for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+		for (filename, starttime, status, url, downloadName, job) in joblist:
 			if filename == change_filename:
-				if hoster == "stream":
-					if job.start(filename):
-						job.markJobAsDownload(filename)
+				if job.start(filename):
+					job.markJobAsDownload(filename)
 		self.showJobs()
 
 	def jobStop(self, change_filename, remove=False):
 		joblist_tmp = []
-		global joblist
-		for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+		for (filename, starttime, status, url, downloadName, job) in joblist:
 			if filename == change_filename:
 				job.stop()
 				if not remove:
-					joblist_tmp.append((filename, starttime, "Wait", url, hoster, downloadName, job))
+					joblist_tmp.append((filename, starttime, "Wait", url, downloadName, job))
 			else:
-				joblist_tmp.append((filename, starttime, status, url, hoster, downloadName, job))
+				joblist_tmp.append((filename, starttime, status, url, downloadName, job))
+		global joblist
 		joblist = joblist_tmp
 		self.showJobs()
 
@@ -671,45 +659,26 @@ class mediaInfo(Screen):
 			self.showJobs()
 		elif check_status == "Wait" or "Complete" or "Error":
 			joblist_tmp = []
-			global joblist
-			for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
+			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if not filename == check_filename:
-					joblist_tmp.append((filename, starttime, status, url, hoster, downloadName, job))
+					joblist_tmp.append((filename, starttime, status, url, downloadName, job))
+			global joblist
 			joblist = joblist_tmp
 			self.showJobs()
 			self.backupJobs()
 
 	def backupJobs(self):
-		global downloadsfile
 		if len(joblist) > 0:
 			if fileExists(downloadsfile):
 				download_file = open(downloadsfile, "w")
-				for (filename, starttime, status, url, hoster, downloadName, job) in joblist:
-					download_file.write('"%s" "%s" "%s" "%s" "%s"\n' % (filename, status, url, hoster, downloadName))
+				for (filename, starttime, status, url, downloadName, job) in joblist:
+					download_file.write('"%s" "%s" "%s" "%s"\n' % (filename, status, url, downloadName))
 				download_file.close()
 		else:
 			download_file = open(downloadsfile, "w").close()
 
-	def formatKBits(self, value, ending="Bit/s", roundNumbers=2):
-		bits = value * 8
-		if bits > (1024*1024):
-			return str(round(float(bits)/float(1024*1024),roundNumbers))+" M"+ending
-		if bits > 1024:
-			return str(round(float(bits)/float(1024),roundNumbers))+" K"+ending
-		else:
-			return str(bits)+" "+ending
-
-	def formatKB(self, value, ending="B", roundNumbers=2):
-		byte = value
-		if byte > (1024*1024):
-			return str(round(float(byte)/float(1024*1024),roundNumbers))+" M"+ending
-		if byte > 1024:
-			return str(round(float(byte)/float(1024),roundNumbers))+" K"+ending
-		else:
-			return str(byte)+" "+ending
-
 	def mediaInfoSetup(self):
-		self.session.open(mediaInfoConfigScreen)
+		self.session.open(MediaInfoConfigScreen)
 
 	def exit(self):
 		already_open = False
@@ -723,7 +692,7 @@ def openMoviePlayerEventView(self):
 		filename = service.info().getName()
 		url = self.session.nav.getCurrentlyPlayingServiceReference().getPath()
 		if re.match('.*?http://', url, re.S):
-			self.session.open(mediaInfo, True)
+			self.session.open(MediaInfo)
 		else:
 			MoviePlayer.originalOpenEventView(self)
 	else:
@@ -732,29 +701,28 @@ def openMoviePlayerEventView(self):
 MoviePlayer.openEventView = openMoviePlayerEventView
 
 def autostart(reason, **kwargs):
-	global downloadsfile
 	if (reason == 0) and (kwargs.has_key("session")):
 		session = kwargs["session"]
-		global joblist
 		print "[MediaInfo] READ OLD JOBS !!!"
 		if fileExists(downloadsfile):
 			dlfile = open(downloadsfile, "r")
 			for rawData in dlfile.readlines():
-				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
+				data = re.findall('"(.*?)" "(.*?)" "(.*?)" "(.*?)"', rawData, re.S)
 				if data:
-					(filename, status, url, hoster, downloadName) = data[0]
-					addJob = downloadTask(session, filename, url, hoster, downloadName)
+					global joblist
+					(filename, status, url, downloadName) = data[0]
+					addJob = downloadTask(session, filename, url, downloadName)
 					if status == "Download":
-						joblist.append((filename, int(time.time()), "Wait", url, hoster, downloadName, addJob))
+						joblist.append((filename, int(time.time()), "Wait", url, downloadName, addJob))
 					elif status == "Error":
-						joblist.append((filename, int(time.time()), "Wait", url, hoster, downloadName, addJob))
+						joblist.append((filename, int(time.time()), "Wait", url, downloadName, addJob))
 					else:
-						joblist.append((filename, int(time.time()), status, url, hoster, downloadName, addJob))
+						joblist.append((filename, int(time.time()), status, url, downloadName, addJob))
 		else:
 			dlfile = open(downloadsfile, "w").close()
 
 def main(session, **kwargs):
-	session.open(mediaInfo, False)
+	session.open(MediaInfo)
 
 def Plugins(**kwargs):
 	return [PluginDescriptor(name="MediaInfo", description="Stream Downloader", where = [PluginDescriptor.WHERE_PLUGINMENU], icon="plugin.png", fnc=main),
