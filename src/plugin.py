@@ -218,8 +218,6 @@ class MediaInfoConfigScreen(Screen, ConfigListScreen):
 		Screen.__init__(self, session)
 		if config.plugins.mediainfo.origskin.value:
 			self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
-		else:
-			self.skinName = "MediaInfoConfigScreen"
 		self.session = session
 
 		self["actions"] = ActionMap(["MI_Actions"], {
@@ -320,8 +318,6 @@ class MediaInfoFolderScreen(Screen):
 		Screen.__init__(self, session)
 		if config.plugins.mediainfo.origskin.value:
 			self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
-		else:
-			self.skinName = "MediaInfoFolderV3"
 
 		if not os.path.isdir(initDir):
 			initDir = "/media/hdd/movie/"
@@ -495,8 +491,6 @@ class MediaInfo(Screen):
 		Screen.__init__(self, session)
 		if config.plugins.mediainfo.origskin.value:
 			self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
-		else:
-			self.skinName = "MediaInfo"
 		self.session = session
 
 		self['head'] = Label()
