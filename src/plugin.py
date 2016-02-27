@@ -93,7 +93,7 @@ class downloadTask(Thread):
 		if self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
 			if len(joblist) > 0:
 				for (filename, starttime, status, url, downloadName, job) in joblist:
-					if status == _("Wait") and self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
+					if status == _("Waiting") and self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
 						if job.start(filename):
 							print "mark as download", filename
 							self.markJobAsDownload(filename)
@@ -122,7 +122,7 @@ class downloadTask(Thread):
 		if len(joblist) > 0:
 			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if filename == change_filename:
-					joblist_tmp.append((filename, starttime, _("Complete"), url, downloadName, job))
+					joblist_tmp.append((filename, starttime, _("Completed"), url, downloadName, job))
 				else:
 					joblist_tmp.append((filename, starttime, status, url, downloadName, job))
 			global joblist
@@ -164,7 +164,7 @@ class downloadTask(Thread):
 			if self.checkRunningJobs() < int(config.plugins.mediainfo.dllimit.value):
 				self.startNextJob()
 			if config.plugins.mediainfo.donemsg.value:
-				message = self.session.open(MessageBox, _("MediaInfo: %s Download Complete.") % self.filename, MessageBox.TYPE_INFO, timeout=5)
+				message = self.session.open(MessageBox, _("MediaInfo: Download of %s complete.") % self.filename, MessageBox.TYPE_INFO, timeout=5)
 
 	def http_failed(self, failure_instance=None, error_message=""):
 		if error_message == "" and failure_instance is not None:
@@ -335,7 +335,7 @@ class MediaInfoFolderScreen(Screen):
 			"red": self.red,
 			"cancel": self.red
 		}, -1)
-		self.setTitle(pname + " - " + _("Download folder"))
+		self.setTitle(pname + " - " + _("Storagepath"))
 		self["key_red"] = Label(_("Cancel"))
 		self["key_green"] = Label(_("Save"))
 		self["key_yellow"] = Label()
@@ -442,10 +442,10 @@ class MediaInfo(Screen):
 			sizes = componentSizes[MediaInfo.SKIN_COMPONENT_KEY]
 			progressHeight = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESS_HEIGHT, 16*zoomfactor)
 			progressHPos = (textHeight-progressHeight)/2
-			progressWidth = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, 128*zoomfactor)
+			progressWidth = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, 136*zoomfactor)
 			statusWidth = sizes.get(MediaInfo.SKIN_COMPONENT_STATUS_WIDTH, 160*zoomfactor)
 			mbinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_MBINFO_WIDTH, 208*zoomfactor)
-			dlinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 144*zoomfactor)
+			dlinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 160*zoomfactor)
 			progressinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, 64*zoomfactor)
 			spacerWidth = sizes.get(MediaInfo.SKIN_COMPONENT_SPACER_WIDTH, 8*zoomfactor)
 			tlf = TemplatedListFonts()
@@ -453,10 +453,10 @@ class MediaInfo(Screen):
 		else:
 			progressHeight = 16*zoomfactor
 			progressHPos = (textHeight-progressHeight)/2
-			progressWidth = 128*zoomfactor
+			progressWidth = 136*zoomfactor
 			statusWidth = 160*zoomfactor
 			mbinfoWidth = 208*zoomfactor
-			dlinfoWidth = 144*zoomfactor
+			dlinfoWidth = 160*zoomfactor
 			progressinfoWidth = 64*zoomfactor
 			spacerWidth = 8*zoomfactor
 			self.ml.l.setFont(0, gFont('Regular', textHeight - 2 * sizefactor))
@@ -467,7 +467,7 @@ class MediaInfo(Screen):
 			dlinfo = "%s" % dlspeed
 			prog = int(progress)
 			proginfo = str(progress)+"%"
-		elif status == _("Complete"):
+		elif status == _("Completed"):
 			mbinfo = ""
 			dlinfo = ""
 			prog = 100
@@ -484,7 +484,7 @@ class MediaInfo(Screen):
 		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-progressinfoWidth-statusWidth-spacerWidth, 0, progressinfoWidth, textHeight, 0, RT_HALIGN_RIGHT | RT_VALIGN_CENTER, proginfo),
 		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-statusWidth, 0, statusWidth, textHeight, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, status),
 		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-progressWidth-progressinfoWidth-statusWidth-2*spacerWidth, textHeight, mbinfoWidth, textHeight, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, mbinfo),
-		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-dlinfoWidth, textHeight, dlinfoWidth, textHeight, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, dlinfo),
+		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-dlinfoWidth, textHeight, dlinfoWidth, textHeight, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, dlinfo),
 		]
 
 	def __init__(self, session):
@@ -553,7 +553,7 @@ class MediaInfo(Screen):
 						print "[Download] added: %s - %s" % (filename, url)
 						self.addJob = downloadTask(self.session, filename, url, None)
 						global joblist
-						joblist.append((filename, int(time.time()), _("Wait"), url, None, self.addJob))
+						joblist.append((filename, int(time.time()), _("Waiting"), url, None, self.addJob))
 						self.jobDownload(filename)
 						self.backupJobs()
 					except urllib2.HTTPError, error:
@@ -563,7 +563,7 @@ class MediaInfo(Screen):
 						print error.reason
 						message = self.session.open(MessageBox, (_("Error: %s") % error.reason), MessageBox.TYPE_INFO, timeout=5)
 				else:
-					message = self.session.open(MessageBox, (_("No rtmp/m3u8 download support, only http protocol downloads.")), MessageBox.TYPE_INFO, timeout=5)
+					message = self.session.open(MessageBox, (_("Download of RTMP/M3U8 is not supported.")), MessageBox.TYPE_INFO, timeout=5)
 			else:
 				print "[MediaInfo] dupe: %s" % filename
 
@@ -585,16 +585,16 @@ class MediaInfo(Screen):
 				totalMB = int(totalbytes/1024/1024)
 				dlspeed = self.calcDnSpeed(int(starttime), currentSizeMB, totalMB)
 				self.dllist.append((filename, status, progress, dlspeed, currentSizeMB, totalMB))
-			elif status == _("Wait"):
+			elif status == _("Waiting"):
 				showWait += 1
 				self.waitlist.append((filename, status, 0, 0, 0, 0))
-			elif status == _("Complete"):
+			elif status == _("Completed"):
 				showComplete += 1
 				self.completelist.append((filename, status, 0, 0, 0, 0))
 			elif status == _("Error"):
 				showError += 1
 				self.errorlist.append((filename, status, 0, 0, 0, 0))
-		info = _("Downloads") + ": %s/%s (%s) - " + _("Wait") + ": %s - " + _("Complete") + ": %s - " + _("Error") + ": %s"
+		info = _("Downloads") + ": %s/%s (%s) - " + _("Waiting") + ": %s - " + _("Completed") + ": %s - " + _("Error") + ": %s"
 		info = info % (str(showDownload), str(len(joblist)), str(config.plugins.mediainfo.dllimit.value), str(showWait), str(showComplete), str(showError))
 		self["head"].setText(info)
 		self.taskList = self.dllist + self.waitlist + self.completelist + self.errorlist
@@ -636,7 +636,7 @@ class MediaInfo(Screen):
 			if filename == change_filename:
 				job.stop()
 				if not remove:
-					joblist_tmp.append((filename, starttime, _("Wait"), url, downloadName, job))
+					joblist_tmp.append((filename, starttime, _("Waiting"), url, downloadName, job))
 			else:
 				joblist_tmp.append((filename, starttime, status, url, downloadName, job))
 		global joblist
@@ -652,7 +652,7 @@ class MediaInfo(Screen):
 		if check_status == _("Download"):
 			self.jobStop(check_filename, True)
 			self.showJobs()
-		elif check_status == _("Wait") or _("Complete") or _("Error"):
+		elif check_status == _("Waiting") or _("Completed") or _("Error"):
 			joblist_tmp = []
 			for (filename, starttime, status, url, downloadName, job) in joblist:
 				if not filename == check_filename:
@@ -708,9 +708,9 @@ def autostart(reason, **kwargs):
 					(filename, status, url, downloadName) = data[0]
 					addJob = downloadTask(session, filename, url, downloadName)
 					if status == _("Download"):
-						joblist.append((filename, int(time.time()), _("Wait"), url, downloadName, addJob))
+						joblist.append((filename, int(time.time()), _("Waiting"), url, downloadName, addJob))
 					elif status == _("Error"):
-						joblist.append((filename, int(time.time()), _("Wait"), url, downloadName, addJob))
+						joblist.append((filename, int(time.time()), _("Waiting"), url, downloadName, addJob))
 					else:
 						joblist.append((filename, int(time.time()), status, url, downloadName, addJob))
 		else:

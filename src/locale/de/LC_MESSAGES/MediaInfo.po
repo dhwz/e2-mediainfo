@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaInfo\n"
-"POT-Creation-Date: 2016-02-27 20:17+0100\n"
-"PO-Revision-Date: 2016-02-27 20:17+0100\n"
+"POT-Creation-Date: 2016-02-27 23:05+0100\n"
+"PO-Revision-Date: 2016-02-27 23:05+0100\n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: MediaInfo Team\n"
 "Language: de_DE\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: plugin.py:96 plugin.py:556 plugin.py:588 plugin.py:597 plugin.py:639
 #: plugin.py:655 plugin.py:711 plugin.py:713
-msgid "Wait"
+msgid "Waiting"
 msgstr "Wartend"
 
 #: plugin.py:105 plugin.py:114 plugin.py:465 plugin.py:498 plugin.py:581
@@ -26,8 +26,8 @@ msgid "Download"
 msgstr "Herunterladen"
 
 #: plugin.py:125 plugin.py:470 plugin.py:591 plugin.py:597 plugin.py:655
-msgid "Complete"
-msgstr "Fertig"
+msgid "Completed"
+msgstr "Abgeschlossen"
 
 #: plugin.py:136 plugin.py:594 plugin.py:597 plugin.py:655 plugin.py:712
 msgid "Error"
@@ -35,8 +35,8 @@ msgstr "Fehler"
 
 #: plugin.py:167
 #, python-format
-msgid "MediaInfo: %s Download Complete."
-msgstr "MediaInfo: %s herunterladen abgeschlossen."
+msgid "MediaInfo: Download of %s complete."
+msgstr "MediaInfo: Herunterladen von %s abgeschlossen."
 
 #: plugin.py:232 plugin.py:339
 msgid "Cancel"
@@ -56,7 +56,7 @@ msgstr "Speicherverzeichnis:"
 
 #: plugin.py:245
 msgid "Show 'Download Complete' Message:"
-msgstr "Zeige 'Download fertig' Nachricht:"
+msgstr "Zeige 'Download abgeschlossen' Nachricht:"
 
 #: plugin.py:246
 msgid "Number of parallel downloads:"
@@ -67,8 +67,8 @@ msgid "Use original MediaInfo skin:"
 msgstr "Original MediaInfo Skin verwenden:"
 
 #: plugin.py:338
-msgid "Download folder"
-msgstr "Downloadverzeichnis"
+msgid "Storagepath"
+msgstr "Speicherverzeichnis"
 
 #: plugin.py:497
 msgid "Remove"
@@ -84,8 +84,8 @@ msgid "Error: %s"
 msgstr "Fehler: %s"
 
 #: plugin.py:566
-msgid "No rtmp/m3u8 download support, only http protocol downloads."
-msgstr "rtmp/m3u8 Downloads werden nicht unterstützt, nur http Protokoll Downloads."
+msgid "Download of RTMP/M3U8 is not supported."
+msgstr "Herunterladen von RTMP/M3U8 wird nicht unterstützt."
 
 #: plugin.py:597
 msgid "Downloads"
