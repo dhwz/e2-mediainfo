@@ -34,7 +34,6 @@ from twisted.internet import defer
 from threading import Thread
 
 try:
-	from enigma import eMediaDatabase
 	from skin import TemplatedListFonts, componentSizes
 	isDreamOS = True
 except:
@@ -190,19 +189,35 @@ class downloadTask(Thread):
 			download_file = open(downloadsfile, "w").close()
 
 class mediaInfoConfigScreen(Screen, ConfigListScreen):
-	skin = """
-	<screen name="MediaInfo Config" title="" position="center,center" size="1280,720" flags="wfNoBorder">
-	  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
-	  <widget name="config" position="10,55" size="1260,620" transparent="1" scrollbarMode="showOnDemand" />
-	  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <widget name="key_yellow" position="761,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <widget name="key_blue" position="1073,684" size="200,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <ePixmap position="59,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
-	  <ePixmap position="374,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
-	  <ePixmap position="726,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
-	  <ePixmap position="1037,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
-	</screen>"""
+	desktopSize = getDesktop(0).size()
+	if desktopSize.width() == 1920:
+		skin = """
+		<screen name="MediaInfo Config" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
+		  <widget name="config" position="15,64" size="1890,940" transparent="1" scrollbarMode="showOnDemand" />
+		  <widget name="key_red" position="20,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="495,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="970,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="1445,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="20,1062" size="455,3" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="495,1062" size="455,3" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="970,1062" size="455,3" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="1445,1062" size="455,3" backgroundColor="#000064c7" zPosition="5" />
+		</screen>"""
+	else:
+		skin = """
+		<screen name="MediaInfo Config" title="" position="center,center" size="1280,720" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
+		  <widget name="config" position="12,60" size="1256,600" transparent="1" scrollbarMode="showOnDemand" />
+		  <widget name="key_red" position="12,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="329,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="646,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="963,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="12,701" size="305,2" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="329,701" size="305,2" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="646,701" size="305,2" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="963,701" size="305,2" backgroundColor="#000064c7" zPosition="5" />
+		</screen>"""
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -269,18 +284,37 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 		self.close()
 
 class mediaInfoFolderScreen(Screen):
-	skin = """
-	<screen name="MediaInfo Folder" title="" position="center,center" size="1280,720" flags="wfNoBorder">
-	  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
-	  <widget name="media" position="20,50" size="1240,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="left" valign="center" />
-	  <widget name="folderlist" position="20,105" size="1240,560" transparent="1" scrollbarMode="showOnDemand" />
-	  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" foregroundColor="#00ffffff" transparent="0" />
-	  <ePixmap position="59,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
-	  <ePixmap position="374,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
-	  <ePixmap position="726,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
-	  <ePixmap position="1037,684" size="21,21" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
-	</screen>"""
+	desktopSize = getDesktop(0).size()
+	if desktopSize.width() == 1920:
+		skin = """
+		<screen name="MediaInfo Folder" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
+		  <widget name="media" position="25,64" size="1870,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="left" valign="center" />
+		  <widget name="folderlist" position="25,150" size="1870,840" transparent="1" scrollbarMode="showOnDemand" />
+		  <widget name="key_red" position="20,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="495,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="970,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="1445,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="20,1062" size="455,3" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="495,1062" size="455,3" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="970,1062" size="455,3" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="1445,1062" size="455,3" backgroundColor="#000064c7" zPosition="5" />
+		</screen>"""
+	else:
+		skin = """
+		<screen name="MediaInfo Folder" title="" position="center,center" size="1280,720" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
+		  <widget name="media" position="12,50" size="1256,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="left" valign="center" />
+		  <widget name="folderlist" position="12,105" size="1256,550" transparent="1" scrollbarMode="showOnDemand" />
+		  <widget name="key_red" position="12,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="329,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="646,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="963,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="12,701" size="305,2" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="329,701" size="305,2" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="646,701" size="305,2" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="963,701" size="305,2" backgroundColor="#000064c7" zPosition="5" />
+		</screen>"""
 
 	def __init__(self, session, initDir, plugin_path = None):
 		Screen.__init__(self, session)
@@ -302,9 +336,11 @@ class mediaInfoFolderScreen(Screen):
 			"red": self.red,
 			"cancel": self.red
 		}, -1)
-		self.setTitle("Choose Download folder")
+		self.setTitle(pname + " " + pversion + " - " + "Download folder selection")
 		self["key_red"] = Label("Cancel")
-		self["key_green"] = Label("Ok")
+		self["key_green"] = Label("Save")
+		self["key_yellow"] = Label()
+		self["key_blue"] = Label()
 
 		self.onFirstExecBegin.append(self.updateFile)
 
@@ -352,29 +388,29 @@ class mediaInfo(Screen):
 		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
 		  <widget name="head" position="0,64" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
 		  <widget name="downloadList" position="15,150" size="1890,840" itemHeight="70" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
-		  <widget name="key_red" position="190,1005" size="250,38" zPosition="1" font="Regular;28" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_green" position="660,1005" size="250,38" zPosition="1" font="Regular;28" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_yellow" position="1130,1005" size="250,38" zPosition="1" font="Regular;28" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_blue" position="1600,1005" size="250,38" zPosition="1" font="Regular;28" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <ePixmap position="150,1010" size="28,28" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
-		  <ePixmap position="620,1010" size="28,28" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
-		  <ePixmap position="1090,1010" size="28,28" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
-		  <ePixmap position="1560,1010" size="28,28" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
+		  <widget name="key_red" position="20,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="495,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="970,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="1445,1030" size="455,30" transparent="1" font="Regular;27" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="20,1062" size="455,3" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="495,1062" size="455,3" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="970,1062" size="455,3" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="1445,1062" size="455,3" backgroundColor="#000064c7" zPosition="5" />
 		</screen>"""
 	else:
 		skin = """
 		<screen name="MediaInfo" title="" position="center,center" size="1280,720" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
 		  <widget name="head" position="0,50" size="1280,50" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;26" halign="center" valign="center" />
-		  <widget name="downloadList" position="10,115" size="1260,550" itemHeight="50" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
-		  <widget name="key_red" position="99,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_green" position="411,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_yellow" position="761,684" size="265,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <widget name="key_blue" position="1073,684" size="200,30" zPosition="1" font="Regular;22" halign="left" valign="center" foregroundColor="#00ffffff" transparent="0" />
-		  <ePixmap position="59,688" size="22,22" zPosition="-1" pixmap="skin_default/buttons/red.png" alphatest="on" />
-		  <ePixmap position="374,688" size="22,22" zPosition="-1" pixmap="skin_default/buttons/green.png" alphatest="on" />
-		  <ePixmap position="726,688" size="22,22" zPosition="-1" pixmap="skin_default/buttons/yellow.png" alphatest="on" />
-		  <ePixmap position="1037,688" size="22,22" zPosition="-1" pixmap="skin_default/buttons/blue.png" alphatest="on" />
+		  <widget name="downloadList" position="12,115" size="1256,550" itemHeight="50" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
+		  <widget name="key_red" position="12,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="329,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="646,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="963,674" size="305,25" transparent="1" font="Regular;22" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="12,701" size="305,2" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="329,701" size="305,2" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="646,701" size="305,2" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="963,701" size="305,2" backgroundColor="#000064c7" zPosition="5" />
 		</screen>"""
 
 	if isDreamOS:
@@ -396,33 +432,31 @@ class mediaInfo(Screen):
 			sizefactor = 1
 			zoomfactor = 1
 
-		width = self['downloadList'].instance.size().width()
-		height = self['downloadList'].l.getItemSize().height()
-		listWidth = width
-		itemHeight = height
+		listWidth = self['downloadList'].instance.size().width()
+		itemHeight = self['downloadList'].l.getItemSize().height()
 		textHeight = itemHeight/2
 		self.ml.l.setItemHeight(itemHeight)
 		if isDreamOS:
 			sizes = componentSizes[mediaInfo.SKIN_COMPONENT_KEY]
-			progressHeight = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_HEIGHT, int(16*zoomfactor))
-			progressHPos = int((textHeight-progressHeight)/2)
-			progressWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, int(128*zoomfactor))
-			statusWidth = sizes.get(mediaInfo.SKIN_COMPONENT_STATUS_WIDTH, int(144*zoomfactor))
-			mbinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_MBINFO_WIDTH, int(208*zoomfactor))
-			dlinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, int(128*zoomfactor))
-			progressinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, int(64*zoomfactor))
-			spacerWidth = sizes.get(mediaInfo.SKIN_COMPONENT_SPACER_WIDTH, int(8*zoomfactor))
+			progressHeight = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_HEIGHT, 16*zoomfactor)
+			progressHPos = (textHeight-progressHeight)/2
+			progressWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESS_WIDTH, 128*zoomfactor)
+			statusWidth = sizes.get(mediaInfo.SKIN_COMPONENT_STATUS_WIDTH, 144*zoomfactor)
+			mbinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_MBINFO_WIDTH, 208*zoomfactor)
+			dlinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 128*zoomfactor)
+			progressinfoWidth = sizes.get(mediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, 64*zoomfactor)
+			spacerWidth = sizes.get(mediaInfo.SKIN_COMPONENT_SPACER_WIDTH, 8*zoomfactor)
 			tlf = TemplatedListFonts()
 			self.ml.l.setFont(0, gFont(tlf.face(tlf.MEDIUM), tlf.size(tlf.MEDIUM)))
 		else:
-			progressHeight = int(16*zoomfactor)
-			progressHPos = int((textHeight-progressHeight)/2)
-			progressWidth = int(128*zoomfactor)
-			statusWidth = int(144*zoomfactor)
-			mbinfoWidth = int(208*zoomfactor)
-			dlinfoWidth = int(128*zoomfactor)
-			progressinfoWidth = int(64*zoomfactor)
-			spacerWidth = int(8*zoomfactor)
+			progressHeight = 16*zoomfactor
+			progressHPos = (textHeight-progressHeight)/2
+			progressWidth = 128*zoomfactor
+			statusWidth = 144*zoomfactor
+			mbinfoWidth = 208*zoomfactor
+			dlinfoWidth = 128*zoomfactor
+			progressinfoWidth = 64*zoomfactor
+			spacerWidth = 8*zoomfactor
 			self.ml.l.setFont(0, gFont('Regular', textHeight - 2 * sizefactor))
 
 		(filename, status, progress, dlspeed, currentSizeMB, totalMB) = entry
