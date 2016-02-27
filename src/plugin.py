@@ -25,7 +25,7 @@ from enigma import gFont, getDesktop, eTimer, eConsoleAppContainer, ePicLoad, eL
 from Tools.Directories import pathExists, fileExists
 from Tools.BoundFunction import boundFunction
 
-import urllib, urllib2, re, os, time, datetime, glob
+import urllib, urllib2, re, os, time, datetime, glob, random, string
 from Tools.Downloader import downloadWithProgress
 
 from twisted.web.client import getPage, error
@@ -53,6 +53,7 @@ MoviePlayer.originalOpenEventView = MoviePlayer.openEventView
 
 config.plugins.mediainfo = ConfigSubsection()
 config.plugins.mediainfo.donemsg = ConfigYesNo(default = True)
+config.plugins.mediainfo.origskin = ConfigYesNo(default = True)
 config.plugins.mediainfo.dllimit = ConfigInteger(default = 2, limits = (1,20))
 config.plugins.mediainfo.savetopath = ConfigText(default = "/media/hdd/movie/",  fixed_size=False)
 
@@ -190,7 +191,7 @@ class downloadTask(Thread):
 
 class mediaInfoConfigScreen(Screen, ConfigListScreen):
 	desktopSize = getDesktop(0).size()
-	if desktopSize.width() == 1920:
+	if desktopSize.width() >= 1920:
 		skin = """
 		<screen name="MediaInfo Config" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
@@ -221,7 +222,10 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
-		self.skinName = "mediaInfoConfigScreenV3"
+		if config.plugins.mediainfo.origskin.value:
+			self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+		else:
+			self.skinName = "mediaInfoConfigScreenV3"
 		self.session = session
 
 		self["actions"] = ActionMap(["MI_Actions"], {
@@ -248,6 +252,7 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry("Save Downloads to:", config.plugins.mediainfo.savetopath))
 		self.list.append(getConfigListEntry("Show 'Download Complete' Message:", config.plugins.mediainfo.donemsg))
 		self.list.append(getConfigListEntry("Parallel Downloads:", config.plugins.mediainfo.dllimit))
+		self.list.append(getConfigListEntry("Use original MediaInfo Skin:", config.plugins.mediainfo.origskin))
 
 	def changedEntry(self):
 		self.createConfigList()
@@ -277,6 +282,7 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 		config.plugins.mediainfo.savetopath.save()
 		config.plugins.mediainfo.donemsg.save()
 		config.plugins.mediainfo.dllimit.save()
+		config.plugins.mediainfo.origskin.save()
 		configfile.save()
 		self.close()
 
@@ -285,7 +291,7 @@ class mediaInfoConfigScreen(Screen, ConfigListScreen):
 
 class mediaInfoFolderScreen(Screen):
 	desktopSize = getDesktop(0).size()
-	if desktopSize.width() == 1920:
+	if desktopSize.width() >= 1920:
 		skin = """
 		<screen name="MediaInfo Folder" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
@@ -318,7 +324,10 @@ class mediaInfoFolderScreen(Screen):
 
 	def __init__(self, session, initDir, plugin_path = None):
 		Screen.__init__(self, session)
-		self.skinName = "MediaInfoFolderV3"
+		if config.plugins.mediainfo.origskin.value:
+			self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+		else:
+			self.skinName = "MediaInfoFolderV3"
 
 		if not os.path.isdir(initDir):
 			initDir = "/media/hdd/movie/"
@@ -382,7 +391,7 @@ class mediaInfoFolderScreen(Screen):
 
 class mediaInfo(Screen):
 	desktopSize = getDesktop(0).size()
-	if desktopSize.width() == 1920:
+	if desktopSize.width() >= 1920:
 		skin = """
 		<screen name="MediaInfo" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
@@ -425,9 +434,12 @@ class mediaInfo(Screen):
 
 	def ListEntry(self, entry):
 		desktopSize = getDesktop(0).size()
-		if desktopSize.width() == 1920:
+		if desktopSize.width() == 3840:
+			sizefactor = 7
+			zoomfactor = 2.7
+		elif desktopSize.width() == 1920:
 			sizefactor = 3
-			zoomfactor = 1.25
+			zoomfactor = 1.3
 		else:
 			sizefactor = 1
 			zoomfactor = 1
@@ -487,7 +499,10 @@ class mediaInfo(Screen):
 
 	def __init__(self, session, livestreaming):
 		Screen.__init__(self, session)
-		self.skinName = "mediaInfoV3"
+		if config.plugins.mediainfo.origskin.value:
+			self.skinName = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+		else:
+			self.skinName = "mediaInfoV3"
 		self.session = session
 
 		self['head'] = Label()
