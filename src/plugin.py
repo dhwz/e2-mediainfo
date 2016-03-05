@@ -533,7 +533,7 @@ class MediaInfo(Screen):
 
 		local = "%s%s" % (config.plugins.mediainfo.savetopath.value, filename)
 		if fileExists(local):
-			self.session.openWithCallback(boundFunction(self.jobStartContinue, filename, url), MessageBox, "File already exists, do you want to overwrite the existing file?", MessageBox.TYPE_YESNO)
+			self.session.openWithCallback(boundFunction(self.jobStartContinue, filename, url), MessageBox, _("File already exists, do you want to overwrite the existing file?"), MessageBox.TYPE_YESNO)
 			print "[MediaInfo] file already exists: %s" % filename
 		else:
 			self.jobStartContinue(filename, url, True)

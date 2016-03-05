@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaInfo\n"
-"POT-Creation-Date: 2016-02-27 23:05+0100\n"
-"PO-Revision-Date: 2016-02-27 23:05+0100\n"
+"POT-Creation-Date: 2016-03-05 12:57+0100\n"
+"PO-Revision-Date: 2016-03-05 12:58+0100\n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: MediaInfo Team\n"
 "Language: de_DE\n"
@@ -15,78 +15,82 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: plugin.py:96 plugin.py:556 plugin.py:588 plugin.py:597 plugin.py:639
-#: plugin.py:655 plugin.py:711 plugin.py:713
+#: plugin.py:92 plugin.py:552 plugin.py:584 plugin.py:593 plugin.py:635
+#: plugin.py:651 plugin.py:707 plugin.py:709
 msgid "Waiting"
 msgstr "Wartend"
 
-#: plugin.py:105 plugin.py:114 plugin.py:465 plugin.py:498 plugin.py:581
-#: plugin.py:621 plugin.py:652 plugin.py:710
+#: plugin.py:101 plugin.py:110 plugin.py:461 plugin.py:494 plugin.py:577
+#: plugin.py:617 plugin.py:648 plugin.py:706
 msgid "Download"
 msgstr "Herunterladen"
 
-#: plugin.py:125 plugin.py:470 plugin.py:591 plugin.py:597 plugin.py:655
+#: plugin.py:121 plugin.py:466 plugin.py:587 plugin.py:593 plugin.py:651
 msgid "Completed"
 msgstr "Abgeschlossen"
 
-#: plugin.py:136 plugin.py:594 plugin.py:597 plugin.py:655 plugin.py:712
+#: plugin.py:132 plugin.py:590 plugin.py:593 plugin.py:651 plugin.py:708
 msgid "Error"
 msgstr "Fehler"
 
-#: plugin.py:167
+#: plugin.py:163
 #, python-format
 msgid "MediaInfo: Download of %s complete."
 msgstr "MediaInfo: Herunterladen von %s abgeschlossen."
 
-#: plugin.py:232 plugin.py:339
+#: plugin.py:228 plugin.py:335
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: plugin.py:233 plugin.py:340
+#: plugin.py:229 plugin.py:336
 msgid "Save"
 msgstr "Speichern"
 
-#: plugin.py:242 plugin.py:500
+#: plugin.py:238 plugin.py:496
 msgid "Setup"
 msgstr "Einstellungen"
 
-#: plugin.py:244
+#: plugin.py:240
 msgid "Storagepath:"
 msgstr "Speicherverzeichnis:"
 
-#: plugin.py:245
+#: plugin.py:241
 msgid "Show 'Download Complete' Message:"
 msgstr "Zeige 'Download abgeschlossen' Nachricht:"
 
-#: plugin.py:246
+#: plugin.py:242
 msgid "Number of parallel downloads:"
 msgstr "Anzahl gleichzeitiger Downloads:"
 
-#: plugin.py:247
+#: plugin.py:243
 msgid "Use original MediaInfo skin:"
 msgstr "Original MediaInfo Skin verwenden:"
 
-#: plugin.py:338
+#: plugin.py:334
 msgid "Storagepath"
 msgstr "Speicherverzeichnis"
 
-#: plugin.py:497
+#: plugin.py:493
 msgid "Remove"
 msgstr "Entfernen"
 
-#: plugin.py:499
+#: plugin.py:495
 msgid "Start/Stop"
 msgstr "Start/Stopp"
 
-#: plugin.py:561 plugin.py:564
+#: plugin.py:536
+msgid "File already exists, do you want to overwrite the existing file?"
+msgstr "Datei bereits vorhanden, soll diese überschrieben werden?"
+
+#: plugin.py:557 plugin.py:560
 #, python-format
 msgid "Error: %s"
 msgstr "Fehler: %s"
 
-#: plugin.py:566
+#: plugin.py:562
 msgid "Download of RTMP/M3U8 is not supported."
 msgstr "Herunterladen von RTMP/M3U8 wird nicht unterstützt."
 
-#: plugin.py:597
+#: plugin.py:593
 msgid "Downloads"
 msgstr "Downloads"
