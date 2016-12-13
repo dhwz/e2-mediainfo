@@ -26,7 +26,7 @@ from Tools.Directories import fileExists
 from Tools.BoundFunction import boundFunction
 from Tools.Downloader import downloadWithProgress
 
-import urllib2, re, os, time, random, string
+import requests, re, os, time, random, string
 
 from threading import Thread
 
@@ -37,7 +37,7 @@ except:
 	isDreamOS = False
 
 pname = "MediaInfo"
-pversion = "3.0.0"
+pversion = "3.0.1"
 
 joblist = []
 
@@ -543,21 +543,19 @@ class MediaInfo(Screen):
 			if not any(filename in job for job in joblist):
 				if re.match('.*?http', url, re.S) and not re.match('.*?m3u8', url, re.S):
 					try:
-						req = urllib2.Request(url, headers={'Content-Type':'application/x-www-form-urlencoded', 'User-agent':'Mozilla/5.0 (Windows NT 6.1; rv:32.0) Gecko/20100101 Firefox/32.0'})
-						res = urllib2.urlopen(req)
-						url = res.geturl()
+						req = requests.session()
+						page = req.head(url, headers={'Content-Type':'application/x-www-form-urlencoded', 'User-agent':'Mozilla/5.0 (Windows NT 6.1; rv:32.0) Gecko/20100101 Firefox/32.0'})
 						print "[Download] added: %s - %s" % (filename, url)
 						self.addJob = downloadTask(self.session, filename, url, None)
 						global joblist
 						joblist.append((filename, int(time.time()), _("Waiting"), url, None, self.addJob))
 						self.jobDownload(filename)
 						self.backupJobs()
-					except urllib2.HTTPError, error:
+					except requests.exceptions.HTTPError, error:
 						print error
 						message = self.session.open(MessageBox, (_("Error: %s") % error), MessageBox.TYPE_INFO, timeout=5)
-					except urllib2.URLError, error:
-						print error.reason
-						message = self.session.open(MessageBox, (_("Error: %s") % error.reason), MessageBox.TYPE_INFO, timeout=5)
+					except:
+						message = self.session.open(MessageBox, ("Unknown Error"), MessageBox.TYPE_INFO, timeout=5)
 				else:
 					message = self.session.open(MessageBox, (_("Download of RTMP/M3U8 is not supported.")), MessageBox.TYPE_INFO, timeout=5)
 			else:
