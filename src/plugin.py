@@ -37,7 +37,7 @@ except:
 	isDreamOS = False
 
 pname = "MediaInfo"
-pversion = "3.0.3"
+pversion = "3.0.4"
 
 joblist = []
 
@@ -526,7 +526,7 @@ class MediaInfo(Screen):
 		if not filename:
 			filename = service.info().getName()
 		filename = ''.join(re.split(r'[.;:!&?,]', filename))
-		quessFileType = os.path.splitext(url)[1][1:]
+		quessFileType = os.path.splitext(url)[1]
 		if re.search('(\.avi|\.mp4|\.ts|\.flv|\.mp3|\.mpg|\.mpeg|\.mkv)', quessFileType, re.I):
 			filetype = quessFileType
 		else:
