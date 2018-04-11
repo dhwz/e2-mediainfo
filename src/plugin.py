@@ -37,7 +37,7 @@ except:
 	isDreamOS = False
 
 pname = "MediaInfo"
-pversion = "3.0.5"
+pversion = "3.0.6"
 
 joblist = []
 
@@ -531,6 +531,7 @@ class MediaInfo(Screen):
 			filetype = quessFileType.group(1)
 		else:
 			filetype = ".mp4"
+		filename = filename.replace('\\t','').strip()
 		filename = "%s%s" % (filename.replace(' ','_').replace('/','_'), filetype)
 
 		local = "%s%s" % (config.plugins.mediainfo.savetopath.value, filename)
