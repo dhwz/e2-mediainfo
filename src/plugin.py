@@ -37,7 +37,7 @@ except:
 	isDreamOS = False
 
 pname = "MediaInfo"
-pversion = "3.0.6"
+pversion = "3.0.7"
 
 joblist = []
 
@@ -525,7 +525,7 @@ class MediaInfo(Screen):
 			url = self.session.nav.getCurrentlyPlayingServiceReference().getPath()
 		if not filename:
 			filename = service.info().getName()
-		filename = ''.join(re.split(r'[.;:!&?,]', filename))
+		filename = ''.join(re.split(r'[.;:!&?,|]', filename))
 		quessFileType = re.search('(\.avi|\.mp4|\.ts|\.flv|\.mp3|\.mpg|\.mpeg|\.mkv)', os.path.splitext(url)[-1], re.I)
 		if quessFileType:
 			filetype = quessFileType.group(1)
