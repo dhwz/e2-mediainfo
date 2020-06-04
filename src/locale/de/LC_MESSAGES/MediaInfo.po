@@ -1,35 +1,35 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaInfo\n"
-"POT-Creation-Date: 2016-03-05 12:57+0100\n"
-"PO-Revision-Date: 2016-03-05 12:58+0100\n"
+"POT-Creation-Date: 2020-06-04 18:14+0200\n"
+"PO-Revision-Date: 2020-06-04 18:14+0200\n"
 "Last-Translator: dhwz <dhwz@gmx.net>\n"
 "Language-Team: MediaInfo Team\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 2.3.1\n"
 "X-Poedit-Basepath: ../../..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: plugin.py:92 plugin.py:552 plugin.py:584 plugin.py:593 plugin.py:635
-#: plugin.py:651 plugin.py:707 plugin.py:709
+#: plugin.py:92 plugin.py:554 plugin.py:588 plugin.py:597 plugin.py:639
+#: plugin.py:655 plugin.py:711 plugin.py:713
 msgid "Waiting"
 msgstr "Wartend"
 
-#: plugin.py:101 plugin.py:110 plugin.py:461 plugin.py:494 plugin.py:577
-#: plugin.py:617 plugin.py:648 plugin.py:706
+#: plugin.py:101 plugin.py:110 plugin.py:461 plugin.py:494 plugin.py:581
+#: plugin.py:621 plugin.py:652 plugin.py:710
 msgid "Download"
 msgstr "Herunterladen"
 
-#: plugin.py:121 plugin.py:466 plugin.py:587 plugin.py:593 plugin.py:651
+#: plugin.py:121 plugin.py:466 plugin.py:591 plugin.py:597 plugin.py:655
 msgid "Completed"
 msgstr "Abgeschlossen"
 
-#: plugin.py:132 plugin.py:590 plugin.py:593 plugin.py:651 plugin.py:708
+#: plugin.py:132 plugin.py:594 plugin.py:597 plugin.py:655 plugin.py:712
 msgid "Error"
 msgstr "Fehler"
 
@@ -78,19 +78,19 @@ msgstr "Entfernen"
 msgid "Start/Stop"
 msgstr "Start/Stopp"
 
-#: plugin.py:536
+#: plugin.py:539
 msgid "File already exists, do you want to overwrite the existing file?"
 msgstr "Datei bereits vorhanden, soll diese überschrieben werden?"
 
-#: plugin.py:557 plugin.py:560
+#: plugin.py:559 plugin.py:562
 #, python-format
 msgid "Error: %s"
 msgstr "Fehler: %s"
 
-#: plugin.py:562
-msgid "Download of RTMP/M3U8 is not supported."
-msgstr "Herunterladen von RTMP/M3U8 wird nicht unterstützt."
+#: plugin.py:566
+msgid "Download of RTMP/HLS/MPEG-DASH streams is not supported."
+msgstr "Herunterladen von RTMP/HLS/MPEG-DASH Streams wird nicht unterstützt."
 
-#: plugin.py:593
+#: plugin.py:597
 msgid "Downloads"
 msgstr "Downloads"
