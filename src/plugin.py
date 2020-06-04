@@ -37,7 +37,7 @@ except:
 	isDreamOS = False
 
 pname = "MediaInfo"
-pversion = "3.0.7"
+pversion = "3.0.8"
 
 joblist = []
 
@@ -547,7 +547,7 @@ class MediaInfo(Screen):
 				if re.match('.*?http', url, re.S) and not re.match('.*?m3u8', url, re.S):
 					try:
 						req = requests.session()
-						page = req.head(url, headers={'Content-Type':'application/x-www-form-urlencoded', 'User-agent':'Mozilla/5.0 (Windows NT 6.1; rv:32.0) Gecko/20100101 Firefox/32.0'})
+						page = req.head(url, headers={'Content-Type':'application/x-www-form-urlencoded', 'User-agent':'Mozilla/5.0 (Windows NT 6.1; rv:32.0) Gecko/20100101 Firefox/32.0'},  verify=False)
 						print "[Download] added: %s - %s" % (filename, url)
 						self.addJob = downloadTask(self.session, filename, url, None)
 						global joblist
@@ -555,6 +555,9 @@ class MediaInfo(Screen):
 						self.jobDownload(filename)
 						self.backupJobs()
 					except requests.exceptions.HTTPError, error:
+						print error
+						message = self.session.open(MessageBox, (_("Error: %s") % error), MessageBox.TYPE_INFO, timeout=5)
+					except requests.exceptions.SSLError, error:
 						print error
 						message = self.session.open(MessageBox, (_("Error: %s") % error), MessageBox.TYPE_INFO, timeout=5)
 					except:
