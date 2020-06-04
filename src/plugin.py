@@ -544,7 +544,7 @@ class MediaInfo(Screen):
 	def jobStartContinue(self, filename, url, answer):
 		if answer is True:
 			if not any(filename in job for job in joblist):
-				if re.match('.*?http', url, re.S) and not re.match('.*?m3u8', url, re.S):
+				if re.match('.*?http', url, re.S) and not re.match('.*?\.m3u8', url, re.S) and not re.match('.*?\.mpd', url, re.S):
 					try:
 						req = requests.session()
 						page = req.head(url, headers={'Content-Type':'application/x-www-form-urlencoded', 'User-agent':'Mozilla/5.0 (Windows NT 6.1; rv:32.0) Gecko/20100101 Firefox/32.0'},  verify=False)
@@ -563,7 +563,7 @@ class MediaInfo(Screen):
 					except:
 						message = self.session.open(MessageBox, ("Unknown Error"), MessageBox.TYPE_INFO, timeout=5)
 				else:
-					message = self.session.open(MessageBox, (_("Download of RTMP/M3U8 is not supported.")), MessageBox.TYPE_INFO, timeout=5)
+					message = self.session.open(MessageBox, (_("Download of RTMP/HLS/MPEG-DASH streams is not supported.")), MessageBox.TYPE_INFO, timeout=5)
 			else:
 				print "[MediaInfo] dupe: %s" % filename
 
