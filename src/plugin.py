@@ -37,7 +37,7 @@ except:
 	isDreamOS = False
 
 pname = "MediaInfo"
-pversion = "3.0.8"
+pversion = "3.0.9"
 
 joblist = []
 
@@ -181,7 +181,21 @@ class downloadTask(Thread):
 
 class MediaInfoConfigScreen(Screen, ConfigListScreen):
 	desktopSize = getDesktop(0).size()
-	if desktopSize.width() >= 1920:
+	if desktopSize.height() == 1440:
+		skin = """
+		<screen name="MediaInfo Config" title="" position="center,center" size="2560,1440" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="2560,100" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;40" halign="center" valign="center" />
+		  <widget name="config" position="24,120" size="2512,1200" transparent="1" scrollbarMode="showOnDemand" />
+		  <widget name="key_red" position="24,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="658,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="1292,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="1926,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="24,1402" size="610,4" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="658,1402" size="610,4" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="1292,1402" size="610,4" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="1926,1402" size="610,4" backgroundColor="#000064c7" zPosition="5" />
+		</screen>"""
+	elif desktopSize.height() == 1080:
 		skin = """
 		<screen name="MediaInfo Config" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
@@ -279,7 +293,22 @@ class MediaInfoConfigScreen(Screen, ConfigListScreen):
 
 class MediaInfoFolderScreen(Screen):
 	desktopSize = getDesktop(0).size()
-	if desktopSize.width() >= 1920:
+	if desktopSize.height() == 1440:
+		skin = """
+		<screen name="MediaInfo Folder" title="" position="center,center" size="2560,1440" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="2560,100" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;40" halign="center" valign="center" />
+		  <widget name="media" position="24,100" size="2512,100" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;40" halign="left" valign="center" />
+		  <widget name="folderlist" position="24,210" size="2512,1100" transparent="1" scrollbarMode="showOnDemand" />
+		  <widget name="key_red" position="24,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="658,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="1292,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="1926,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="24,1402" size="610,4" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="658,1402" size="610,4" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="1292,1402" size="610,4" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="1926,1402" size="610,4" backgroundColor="#000064c7" zPosition="5" />
+		</screen>"""
+	elif desktopSize.height() == 1080:
 		skin = """
 		<screen name="MediaInfo Folder" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
@@ -377,7 +406,22 @@ class MediaInfoFolderScreen(Screen):
 
 class MediaInfo(Screen):
 	desktopSize = getDesktop(0).size()
-	if desktopSize.width() >= 1920:
+	if desktopSize.height() == 1440:
+		skin = """
+		<screen name="MediaInfo" title="" position="center,center" size="2560,1440" flags="wfNoBorder">
+		  <widget render="Label" source="Title" position="0,0" size="2560,100" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;40" halign="center" valign="center" />
+		  <widget name="head" position="0,100" size="2560,100" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;40" halign="center" valign="center" />
+		  <widget name="downloadList" position="24,230" size="2512,1100" itemHeight="100" foregroundColor="#00ffffff" scrollbarMode="showOnDemand" transparent="1" />
+		  <widget name="key_red" position="24,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_green" position="658,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_yellow" position="1292,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <widget name="key_blue" position="1926,1348" size="610,50" transparent="1" font="Regular;32" valign="center" halign="center" zPosition="5" />
+		  <eLabel name="button red" position="24,1402" size="610,4" backgroundColor="#00f23d21" zPosition="5" />
+		  <eLabel name="button green" position="658,1402" size="610,4" backgroundColor="#0031a500" zPosition="5" />
+		  <eLabel name="button yellow" position="1292,1402" size="610,4" backgroundColor="#00e5b243" zPosition="5" />
+		  <eLabel name="button blue" position="1926,1402" size="610,4" backgroundColor="#000064c7" zPosition="5" />
+		</screen>"""
+	elif desktopSize.height() == 1080:
 		skin = """
 		<screen name="MediaInfo" title="" position="center,center" size="1920,1080" flags="wfNoBorder">
 		  <widget render="Label" source="Title" position="0,0" size="1920,64" foregroundColor="#00ffffff" transparent="0" zPosition="5" font="Regular;29" halign="center" valign="center" />
@@ -420,10 +464,10 @@ class MediaInfo(Screen):
 
 	def ListEntry(self, entry):
 		desktopSize = getDesktop(0).size()
-		if desktopSize.width() == 3840:
-			sizefactor = 7
-			zoomfactor = 2.7
-		elif desktopSize.width() == 1920:
+		if desktopSize.height() == 1440:
+			sizefactor = 4
+			zoomfactor = 2
+		elif desktopSize.height() == 1080:
 			sizefactor = 3
 			zoomfactor = 1.3
 		else:
