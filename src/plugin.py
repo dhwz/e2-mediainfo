@@ -37,7 +37,7 @@ except:
 	isDreamOS = False
 
 pname = "MediaInfo"
-pversion = "3.0.9"
+pversion = "3.1.0"
 
 joblist = []
 
@@ -461,6 +461,8 @@ class MediaInfo(Screen):
 		SKIN_COMPONENT_DLINFO_WIDTH = "dlinfoWidth"
 		SKIN_COMPONENT_PROGRESSINFO_WIDTH = "progressinfoWidth"
 		SKIN_COMPONENT_SPACER_WIDTH = "spacerWidth"
+		SKIN_COMPONENT_TEXT_X = "textX"	
+		SKIN_COMPONENT_TEXT_Y = "textY"				
 
 	def ListEntry(self, entry):
 		desktopSize = getDesktop(0).size()
@@ -488,6 +490,8 @@ class MediaInfo(Screen):
 			dlinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_DLINFO_WIDTH, 160*zoomfactor)
 			progressinfoWidth = sizes.get(MediaInfo.SKIN_COMPONENT_PROGRESSINFO_WIDTH, 64*zoomfactor)
 			spacerWidth = sizes.get(MediaInfo.SKIN_COMPONENT_SPACER_WIDTH, 8*zoomfactor)
+			textX = sizes.get(MediaInfo.SKIN_COMPONENT_TEXT_X, 0)
+			textY = sizes.get(MediaInfo.SKIN_COMPONENT_TEXT_Y, 0)
 			tlf = TemplatedListFonts()
 			self.ml.l.setFont(0, gFont(tlf.face(tlf.MEDIUM), tlf.size(tlf.MEDIUM)))
 		else:
@@ -499,6 +503,8 @@ class MediaInfo(Screen):
 			dlinfoWidth = 160*zoomfactor
 			progressinfoWidth = 64*zoomfactor
 			spacerWidth = 8*zoomfactor
+			textX = 0
+			textY = 0
 			self.ml.l.setFont(0, gFont('Regular', textHeight - 2 * sizefactor))
 
 		(filename, status, progress, dlspeed, currentSizeMB, totalMB) = entry
@@ -519,7 +525,7 @@ class MediaInfo(Screen):
 			proginfo = "0%"
 
 		return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, listWidth-progressWidth-progressinfoWidth-statusWidth-3*spacerWidth, itemHeight, 0, RT_HALIGN_LEFT | RT_WRAP, filename),
+		(eListboxPythonMultiContent.TYPE_TEXT, textX, textY, listWidth-progressWidth-progressinfoWidth-statusWidth-3*spacerWidth, itemHeight, 0, RT_HALIGN_LEFT | RT_WRAP, filename),
 		(eListboxPythonMultiContent.TYPE_PROGRESS, listWidth-progressWidth-progressinfoWidth-statusWidth-2*spacerWidth, progressHPos, progressWidth, progressHeight, prog),
 		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-progressinfoWidth-statusWidth-spacerWidth, 0, progressinfoWidth, textHeight, 0, RT_HALIGN_RIGHT | RT_VALIGN_CENTER, proginfo),
 		(eListboxPythonMultiContent.TYPE_TEXT, listWidth-statusWidth, 0, statusWidth, textHeight, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, status),
